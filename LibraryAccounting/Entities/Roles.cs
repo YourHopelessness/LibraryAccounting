@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.Entities
 {
-    [Table("Roles")]
+    [Table("roles")]
     public class Roles
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }

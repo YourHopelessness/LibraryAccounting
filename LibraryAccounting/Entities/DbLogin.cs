@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.Entities
 {
-    [Table("Auth")]
+    [Table("auth")]
     public class DbLogin
     {
         [Required]

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.Entities
 {
-    [Table("UserRoles")]
+    [Table("user_roles")]
     public class UserRoles
     {
         [Required]
         public Guid EmployeeId { get; set; }
         [Required]
-        public Guid RoleId { get; set; }
+        public int RoleId { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.Entities
 {
-    [Table("Reservations")]
+    [Table("reservations")]
     public class Reservations
     {
         [Required]

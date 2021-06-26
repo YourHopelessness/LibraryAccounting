@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.Entities
 {
-    [Table("Books")]
+    [Table("books")]
     public class Books
     {
         [Key]
         public Guid Id { get; set; }
-        public int ISBN { get; set; }
+        public string ISBN { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
@@ -22,6 +22,6 @@ namespace LibraryAccounting.Entities
         [Required]
         public DateTime PublishedDate { get; set; }
         [Required]
-        public Guid StatusId { get; set; }
+        public int StatusId { get; set; }
     }
 }

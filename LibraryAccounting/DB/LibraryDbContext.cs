@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LibraryAccounting.Properties.DB
+namespace LibraryAccounting.DB
 {
     public class LibraryDbContext : DbContext
     {
@@ -22,7 +22,7 @@ namespace LibraryAccounting.Properties.DB
             {
                 login.HasKey(key => new { key.UserName, key.Password, key.EmployeeId });
                 login.Property(e => e.EmployeeId)
-                     .HasColumnName("employeeId");
+                     .HasColumnName("employee_id");
                 login.HasOne<Emloyees>()
                      .WithMany()
                      .HasForeignKey(e => e.EmployeeId);
@@ -38,17 +38,17 @@ namespace LibraryAccounting.Properties.DB
                 employee.Property(key => key.Id)
                         .HasColumnName("id");
                 employee.Property(e => e.FirstName)
-                        .HasColumnName("firstName");
+                        .HasColumnName("first_name");
                 employee.Property(e => e.LastName)
-                        .HasColumnName("lastName");
+                        .HasColumnName("last_name");
                 employee.Property(e => e.Position)
                         .HasColumnName("position");
                 employee.Property(e => e.WorkEmail)
-                        .HasColumnName("workEmail");
+                        .HasColumnName("work_email");
                 employee.Property(e => e.PersonalEmail)
-                        .HasColumnName("personalEmail");
+                        .HasColumnName("personal_email");
                 employee.Property(e => e.PhoneNumber)
-                        .HasColumnName("phoneNumber");
+                        .HasColumnName("phone_number");
             });
 
             modelBuilder.Entity<Roles>(role =>
@@ -59,16 +59,16 @@ namespace LibraryAccounting.Properties.DB
                 role.Property(r => r.Name)
                     .HasColumnName("name");
                 role.Property(r => r.Description)
-                    .HasColumnName("descriprion");
+                    .HasColumnName("description");
             });
 
             modelBuilder.Entity<UserRoles>(role =>
             {
-                role.HasKey(key => new { key.EmployeeId, key.RoleId });
+                role.HasKey(key => key.EmployeeId);
                 role.Property(ur => ur.RoleId)
-                    .HasColumnName("roleId");
+                    .HasColumnName("role_id");
                 role.Property(ur => ur.EmployeeId)
-                    .HasColumnName("employeeId");
+                    .HasColumnName("employee_id");
                 role.HasOne<Emloyees>()
                     .WithMany()
                     .HasForeignKey(key => key.EmployeeId);
@@ -82,18 +82,19 @@ namespace LibraryAccounting.Properties.DB
                     book.HasKey(key => key.Id);
                     book.Property(key => key.Id)
                         .HasColumnName("id");
-                    book.HasAlternateKey(b => b.ISBN)
-                        .HasName("isbn");
+                    book.HasAlternateKey(b => b.ISBN);
+                    book.Property(key => key.ISBN)
+                        .HasColumnName("isbn");
                     book.Property(r => r.Title)
                         .HasColumnName("title");
                     book.Property(r => r.Author)
                         .HasColumnName("author");
                     book.Property(r => r.PublishedBy)
-                        .HasColumnName("publishedBy");
+                        .HasColumnName("published_by");
                     book.Property(r => r.PublishedDate)
-                        .HasColumnName("publishedDate");
+                        .HasColumnName("published_date");
                     book.Property(r => r.StatusId)
-                        .HasColumnName("statusId");
+                        .HasColumnName("status_id");
                     book.HasOne<BooksStatuses>()
                         .WithMany()
                         .HasForeignKey(key => key.StatusId);
@@ -105,7 +106,7 @@ namespace LibraryAccounting.Properties.DB
                 status.Property(key => key.Id)
                       .HasColumnName("id");
                 status.Property(s => s.Status)
-                      .HasColumnName("statusName");
+                      .HasColumnName("status_name");
             });
 
             modelBuilder.Entity<Reservations>(reservation =>
@@ -115,15 +116,15 @@ namespace LibraryAccounting.Properties.DB
                                                 key.ReservationDate,
                                                 key.ReturnDate });
                 reservation.Property(r => r.ReaderId)
-                           .HasColumnName("readerId");
+                           .HasColumnName("reader_id");
                 reservation.Property(r => r.BookId)
-                           .HasColumnName("bookId");
+                           .HasColumnName("book_id");
                 reservation.Property(r => r.ReservationDate)
-                           .HasColumnName("reservationDate");
+                           .HasColumnName("reservation_date");
                 reservation.Property(r => r.ReturnDate)
-                           .HasColumnName("returnDate");
+                           .HasColumnName("return_date");
                 reservation.Property(r => r.ReturningFlag)
-                           .HasColumnName("returningFlag")
+                           .HasColumnName("returning_flag")
                            .HasDefaultValue(false);  
             });
 
@@ -135,11 +136,11 @@ namespace LibraryAccounting.Properties.DB
                     key.ChangeDate
                 });
                 change.Property(r => r.ChangemakerId)
-                           .HasColumnName("changemakerId");
+                           .HasColumnName("changemaker_id");
                 change.Property(r => r.BookId)
-                           .HasColumnName("bookId");
+                           .HasColumnName("book_id");
                 change.Property(r => r.ChangeDate)
-                           .HasColumnName("changeDate");
+                           .HasColumnName("change_date");
                 change.Property(r => r.Comment)
                            .HasColumnName("comment");
                 change.HasOne<Emloyees>()
@@ -150,8 +151,6 @@ namespace LibraryAccounting.Properties.DB
                       .HasForeignKey(key => key.BookId);
             });
         }
-
-
 
     }
 }

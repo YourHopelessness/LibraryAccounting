@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.Entities
 {
-    [Table("Employees")]
+    [Table("employees")]
     public class Emloyees
     {
         [Key]
