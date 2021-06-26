@@ -10,19 +10,18 @@ namespace LibraryAccounting.DB
     {
         public static string GetConnectionString()
         {
-            string connStr = "";
+            string connStr = null;
             try
             {
                 var appSettings = ConfigurationManager.AppSettings;
-                connStr = appSettings["LibraryContext"];
+                connStr = appSettings["ConnectionString:LibraryContext"];
             }
             catch (ConfigurationErrorsException)
             {
                 Console.WriteLine("Error reading app settings\n Load standart data connection");
-                connStr = $"Username=admin;Password=123;Server=localhost;Database=library-accounting_db_1";
             }
 
-            return connStr;
+            return connStr ?? $"Username=admin;Password=123;Server=localhost;Database=library-accounting_db_1";
         }
     }
 }
