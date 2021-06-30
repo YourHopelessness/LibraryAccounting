@@ -11,7 +11,7 @@ namespace LibraryAccounting.Entities
     public class Books
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string ISBN { get; set; }
         [Required]
         public string Title { get; set; }
@@ -20,7 +20,8 @@ namespace LibraryAccounting.Entities
         [Required]
         public string PublishedBy { get; set; }
         [Required]
-        public DateTime PublishedDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? PublishedDate { get; set; }
         [Required]
         public int StatusId { get; set; }
     }

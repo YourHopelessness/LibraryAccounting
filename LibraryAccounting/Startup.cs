@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace LibraryAccounting
 {
@@ -30,15 +32,22 @@ namespace LibraryAccounting
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddServerSideBlazor();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
             services.AddDbContext<LibraryDbContext>(options => options.UseNpgsql(DbConfig.GetConnectionString()));
-            services.AddScoped<BooksList>();
-            services.AddScoped<IBooksVisable, BooksList>();
-            services.AddRazorPages();
+            services.AddScoped<BooksListService>();
+            services.AddScoped<IBooksVisable, BooksListService>();
+            services.AddRazorPages(options =>
+           {
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        { 
+        {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,10 +63,11 @@ namespace LibraryAccounting
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/Library");
+                endpoints.MapRazorPages();
             });
         }
     }

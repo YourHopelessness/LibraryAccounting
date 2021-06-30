@@ -11,8 +11,8 @@ namespace LibraryAccounting.Entities
     public class UserRoles
     {
         [Required]
-        public Guid EmployeeId { get; set; }
+        public Guid? EmployeeId { get; set; }
         [Required]
-        public int RoleId { get; set; }
+        public int? RoleId { get; set; }
     }
 }

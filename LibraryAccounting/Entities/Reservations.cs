@@ -11,15 +11,17 @@ namespace LibraryAccounting.Entities
     public class Reservations
     {
         [Required]
-        public Guid ReaderId { get; set; }
+        public Guid? ReaderId { get; set; }
         [Required]
-        public Guid BookId { get; set; }
+        public Guid? BookId { get; set; }
         [Required]
-        public DateTime ReservationDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? ReservationDate { get; set; }
         [Required]
-        public DateTime ReturnDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? ReturnDate { get; set; }
         [Required]
-        public bool ReturningFlag { get; set; }
+        public bool? ReturningFlag { get; set; }
         public string Comment { get; set; }
     }
 }

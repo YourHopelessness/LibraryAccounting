@@ -11,11 +11,12 @@ namespace LibraryAccounting.Entities
     public class Changes
     {
         [Required]
-        public Guid ChangemakerId { get; set; }
+        public Guid? ChangemakerId { get; set; }
         [Required]
-        public Guid BookId { get; set; }
+        public Guid? BookId { get; set; }
         [Required]
-        public DateTime ChangeDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? ChangeDate { get; set; }
         public string Comment { get; set;  }
     }
 }

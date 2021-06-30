@@ -11,12 +11,13 @@ namespace LibraryAccounting.DTO
         public string Title { get; set; }
         public string Author { get; set; }
         public string PublishedBy { get; set; }
-        public DateTime PublishedDate { get; set; }
-        public int StatusId { get; set; }
-        public DateTime ReturningDate {get; set;}
+        public string PublishedDate { get; set; }
+        public string Status { get; set; }
+        public string ReservationDate { get; set;}
+        public string ReturningDate {get; set;}
         public string Reader { get; set; }
         public string Comment { get; set; }
         public string Changemaker { get; set; }
-        public DateTime ChangeDate { get; set; }
+        public string ChangeDate { get; set; }
     }
 }

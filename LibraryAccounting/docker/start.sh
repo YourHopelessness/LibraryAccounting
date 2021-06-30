@@ -1,1 +1,1 @@
-docker docker-compose --project-name=library-accounting --file=./docker-compose.yml up -d
+docker compose --project-name=library-accounting --file=./docker-compose.yml up -d

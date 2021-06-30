@@ -12,6 +12,9 @@ namespace LibraryAccounting.DB
         public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options) { }
         public DbSet<DbLogin> Logins { get; set; }
         public DbSet<Emloyees> Emloyees { get; set; }
+        public DbSet<Reservations> Reservations { get; set; }
+        public DbSet<Changes> Changes { get; set; }
+        public DbSet<BooksStatuses> BooksStatuses { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<Books> Books {get; set;}

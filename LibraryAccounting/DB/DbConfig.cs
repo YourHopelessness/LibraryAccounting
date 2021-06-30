@@ -21,7 +21,7 @@ namespace LibraryAccounting.DB
                 Console.WriteLine("Error reading app settings\n Load standart data connection");
             }
 
-            return connStr ?? $"Username=admin;Password=123;Server=localhost;Database=library-accounting_db_1";
+            return connStr ?? $"Username=admin;Password=123;Server=localhost;Port=5432;Database=library-accounting_db_1";
         }
     }
 }

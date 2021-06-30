@@ -10,7 +10,7 @@ services:
       - pgconf:/etc/postgresql
       - pglog:/var/log/postgresql
     environment:
-      - POSTGRES_DB=your_db
+      - POSTGRES_DB=library-accounting_db_1
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=123
 

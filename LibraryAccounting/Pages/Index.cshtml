@@ -1,0 +1,101 @@
+﻿@page 
+@model LibraryAccounting.Pages.IndexModel
+@{
+    ViewData["Title"] = "Бибилотека";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div style="font-size:20px">
+    <span class="label label-success">@Model.Result</span>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <form method="post">
+            <h4>Действия</h4>
+            <hr>
+            <table class="table">
+                <tr>
+                    <th>
+                        <div class="form-group">
+                            <button type="submit" asp-page-handler="AddMessage"
+                                    class="btn btn-default">
+                                Добавить книгу
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="form-group">
+                            <button type="submit" asp-page-handler="TakeBook"
+                                    class="btn btn-default">
+                                Взять книгу
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="form-group">
+                            <button type="submit" asp-page-handler="FilterBy"
+                                    class="btn btn-default">
+                                Отфильтровать
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post">
+            <h2>Книги</h2>
+            <hr>
+                @if (Model.Library == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Код ISBN</th>
+                                <th>Название</th>
+                                <th>Автор</th>
+                                <th>Издательство</th>
+                                <th>Год издания</th>
+                                <th>Статус</th>
+                                <th>Читатель</th>
+                                <th>Дата выдачи</th>
+                                <th>Дата возврата</th>
+                                <th>Комментарий</th>
+                                <th>Последнее изменение</th>
+                                <th>Автор изменений</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var book in Model.Library)
+                            {
+                            <tr>
+                                <td>@book.ISBN</td>
+                                <td>@book.Title</td>
+                                <td>@book.Author</td>
+                                <td>@book.PublishedBy</td>
+                                <td>@book.PublishedDate</td>
+                                <td>@book.Status</td>
+                                <td>@book.Reader</td>
+                                <td>@book.ReservationDate</td>
+                                <td>@book.ReturningDate</td>
+                                <td>@book.Comment</td>
+                                <td>@book.ChangeDate</td>
+                                <td>@book.Changemaker</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+        </form>
+    </div>
+</div>
