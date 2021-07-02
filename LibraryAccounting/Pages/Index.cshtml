@@ -1,101 +1,169 @@
-﻿@page 
+﻿@page "{currentpage=1}/{sortby=Title}"
+
 @model LibraryAccounting.Pages.IndexModel
-@{
-    ViewData["Title"] = "Бибилотека";
-}
+@{ ViewData["Title"] = "Бибилотека"; }
 
 <h1>@ViewData["Title"]</h1>
 
 <div style="font-size:20px">
     <span class="label label-success">@Model.Result</span>
 </div>
-
-<div class="row">
-    <div class="col-md-3">
-        <form method="post">
-            <h4>Действия</h4>
-            <hr>
-            <table class="table">
-                <tr>
-                    <th>
-                        <div class="form-group">
-                            <button type="submit" asp-page-handler="AddMessage"
+@if (Model.Library == null)
+{
+    <p><em>Нет ни одного элемента для показа</em></p> 
+}
+else
+{
+    <div class="row">
+        <div class="col-md-3">
+            <form method="post">
+                <table class="table">
+                    <tr>
+                        <th>
+                            <button type="submit" asp-page-handler="TakeBook"
+                                    class="btn btn-primary">
+                                Взять книгу
+                            </button>
+                        </th>
+                        <th>
+                            <button type="submit" asp-page-handler="FilterBy"
+                                    class="btn btn-primary">
+                                Отфильтровать
+                            </button>
+                        </th>
+                        <th>
+                            <button type="submit" asp-page-handler="AddBook"
                                     class="btn btn-default">
                                 Добавить книгу
                             </button>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="form-group">
-                            <button type="submit" asp-page-handler="TakeBook"
-                                    class="btn btn-default">
-                                Взять книгу
-                            </button>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="form-group">
-                            <button type="submit" asp-page-handler="FilterBy"
-                                    class="btn btn-default">
-                                Отфильтровать
-                            </button>
-                        </div>
-                    </th>
-                </tr>
-            </table>
-        </form>
+                        </th>
+                    </tr>
+                </table>
+            </form>
+        </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <form method="post">
-            <h2>Книги</h2>
-            <hr>
-                @if (Model.Library == null)
-                {
-                    <p><em>Loading...</em></p>
-                }
-                else
-                {
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Код ISBN</th>
-                                <th>Название</th>
-                                <th>Автор</th>
-                                <th>Издательство</th>
-                                <th>Год издания</th>
-                                <th>Статус</th>
-                                <th>Читатель</th>
-                                <th>Дата выдачи</th>
-                                <th>Дата возврата</th>
-                                <th>Комментарий</th>
-                                <th>Последнее изменение</th>
-                                <th>Автор изменений</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var book in Model.Library)
-                            {
+    <div class="row">
+        <div class="col-md">
+            <form method="get" name="book_list" action="">
+                <h2>Книги</h2>
+                <hr>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="ISBN">
+                                    @Html.DisplayNameFor(model => model.Library.First().ISBN)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="Title">
+                                    @Html.DisplayNameFor(model => model.Library.First().Title)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="Author">
+                                    @Html.DisplayNameFor(model => model.Library.First().Author)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="PublishedDate">
+                                    @Html.DisplayNameFor(model => model.Library.First().PublishedDate)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="PublishedBy">
+                                    @Html.DisplayNameFor(model => model.Library.First().PublishedBy)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="Status">
+                                    @Html.DisplayNameFor(model => model.Library.First().Status)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="Reader">
+                                    @Html.DisplayNameFor(model => model.Library.First().Reader)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="ReservationDate">
+                                    @Html.DisplayNameFor(model => model.Library.First().ReservationDate)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="ReturningDate">
+                                    @Html.DisplayNameFor(model => model.Library.First().ReturningDate)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="ChangeDate">
+                                    @Html.DisplayNameFor(model => model.Library.First().ChangeDate)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="Changemaker">
+                                    @Html.DisplayNameFor(model => model.Library.First().Changemaker)
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link" asp-route-sortby="Comment">
+                                    @Html.DisplayNameFor(model => model.Library.First().Comment)
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in Model.Library)
+                        {
                             <tr>
                                 <td>@book.ISBN</td>
                                 <td>@book.Title</td>
                                 <td>@book.Author</td>
-                                <td>@book.PublishedBy</td>
                                 <td>@book.PublishedDate</td>
+                                <td>@book.PublishedBy</td>
                                 <td>@book.Status</td>
                                 <td>@book.Reader</td>
                                 <td>@book.ReservationDate</td>
                                 <td>@book.ReturningDate</td>
-                                <td>@book.Comment</td>
                                 <td>@book.ChangeDate</td>
                                 <td>@book.Changemaker</td>
+                                <td>@book.Comment</td>
+                                <td>
+                                    <a asp-page="./EditBook" asp-route-id="@book.BookId">Редактировать</a> |
+                                    <a asp-page="./BookStat" asp-route-id="@book.BookId">Статистика</a> |
+                                    <a asp-page="./DeleteBook" asp-route-id="@book.BookId">Удалить</a>
+                                </td>
                             </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-        </form>
+                         }
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
-</div>
+    <div>
+        <ul class="pagination">
+            <li class="page-item @(!Model.ShowFirst? "disabled":"")" title="First">
+                <a class="page-link" asp-all-route-data="@(new Dictionary<string, string>{ { "currentpage", "1" },{ "sortby", Model.SortBy }})">
+                    <i class="fas fa-fast-backward"></i>
+                </a>
+            </li>
+
+            <li class="page-item @(!Model.ShowPrevious? "disabled":"")" title="Previous">
+                <a  asp-all-route-data="@(new Dictionary<string, string>{{ "currentpage", (Model.CurrentPage -1).ToString() },{ "sortby", Model.SortBy }})" class="page-link">
+                    <i class="fas fa-step-backward"></i>
+                </a>
+            </li>
+            <li class="page-item  @(!Model.ShowNext? "disabled":"")" title="Next">
+                <a  asp-all-route-data="@(new Dictionary<string, string>{{ "currentpage", (Model.CurrentPage + 1).ToString() },{ "sortby", Model.SortBy }})" class="page-link">
+                    <i class="fas fa-step-forward"></i>
+                </a>
+            </li>
+
+            <li class="page-item  @(!Model.ShowLast? "disabled":"")" title="Last">
+                <a asp-all-route-data="@(new Dictionary<string, string>{{ "currentpage", Model.TotalPages.ToString() },{ "sortby", Model.SortBy }})" class="page-link">
+                    <i class="fas fa-fast-forward"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+}

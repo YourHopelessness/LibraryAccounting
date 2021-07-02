@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,48 +18,48 @@ namespace LibraryAccounting.Pages
     {
         public ICollection<DTO.LibraryDTO> Library { get; set; }
         private readonly Services.IBooksVisable _library;
+        [BindProperty(SupportsGet = true)]
+        public int CurrentPage { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string SortBy { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string OrderBy { get; set; }
+        public int Count { get; set; }
+        public int PageSize { get; set; } = 10;
+        public int TotalPages => (int)Math.Ceiling(decimal.Divide(Count, PageSize));
+        public bool ShowPrevious => CurrentPage > 1;
+        public bool ShowNext => CurrentPage < TotalPages;
+        public bool ShowFirst => CurrentPage != 1;
+        public bool ShowLast => CurrentPage != TotalPages;
+
+        [TempData]
+        public string Result { get; set; }
 
         public IndexModel(Services.IBooksVisable library)
         {
             _library = library;
         }
 
-        [BindProperty]
-        public Message Message { get; set; }
-
-        public IReadOnlyList<Message> Messages { get; private set; }
-
-        [TempData]
-        public string Result { get; set; }
-
         public async Task OnGetAsync()
         {
-            Library = await _library.GetBooks();
+            Library = await _library.GetBooks(CurrentPage, PageSize, SortBy);
+            Count = await _library.GetCount();
         }
 
-        public async Task<IActionResult> OnPostAddMessageAsync()
+        public async Task<IActionResult> OnPostAddBookAsync()
         {
+            throw new System.Exception();
             return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostTakeBookAsync()
         {
+            throw new System.Exception();
             return RedirectToPage();
         }
         public async Task<IActionResult> OnPostFilterByAsync()
         {
-            return RedirectToPage();
-        }
-
-        public async Task<IActionResult> OnPostDeleteAllMessagesAsync()
-        {
-            return RedirectToPage();
-        }
-
-        public async Task<IActionResult> OnPostDeleteMessageAsync(int id)
-        {
-            
-
+            throw new System.Exception();
             return RedirectToPage();
         }
     }
