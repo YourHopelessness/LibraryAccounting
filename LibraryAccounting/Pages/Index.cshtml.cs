@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LibraryAccounting.BL.Dto;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,8 @@ namespace LibraryAccounting.Pages
 
     public class IndexModel : PageModel
     {
-        public ICollection<DTO.LibraryDTO> Library { get; set; }
-        private readonly Services.IBooksVisable _library;
+        public ICollection<LibraryDTO> Library { get; set; }
+        private readonly BL.Services.IBooksVisable _library;
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -35,7 +36,7 @@ namespace LibraryAccounting.Pages
         [TempData]
         public string Result { get; set; }
 
-        public IndexModel(Services.IBooksVisable library)
+        public IndexModel(BL.Services.IBooksVisable library)
         {
             _library = library;
         }

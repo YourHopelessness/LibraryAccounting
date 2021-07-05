@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LibraryAccounting.BL</name>
+    </assembly>
+    <members>
+        <member name="T:LibraryAccounting.BL.Services.IBooksVisable">
+            <summary>
+            Интерфейс для сервиса показа книг
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IBooksVisable.GetBooks(System.Int32,System.Int32,System.String)">
+            <summary>
+            Получение списка имеющихся книг
+            </summary>
+            <param name="currentPage">Текущая отображаемая страница</param>
+            <param name="pageSize"></param>
+            <param name="field"></param>
+            <returns>Список книг</returns>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IBooksVisable.GetCount">
+            <summary>
+            Получение длины массива книг
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.BooksListService">
+            <summary>
+            Сервис показа списка книг и работы с ним
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.BooksListService.#ctor(LibraryAccounting.DAL.DB.LibraryDbContext)">
+            <summary>
+            Конструктор со внедрением зависимости контекста базы данных
+            </summary>
+            <param name="context">Контекст базы данных</param>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.BooksListService.GetCount">
+            <inherets></inherets>>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.BooksListService.GetBooks(System.Int32,System.Int32,System.String)">
+            <inherets></inherets>>
+        </member>
+    </members>
+</doc>

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using LibraryAccounting.DB;
-using LibraryAccounting.Services;
+using LibraryAccounting.DAL.DB;
+using LibraryAccounting.BL.Services;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
