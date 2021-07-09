@@ -89,11 +89,5 @@ namespace LibraryAccounting.BL.Services
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
         }
-
-        public async void Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
-        }
     }
 }

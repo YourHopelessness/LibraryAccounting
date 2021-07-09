@@ -9,7 +9,6 @@
     <div style="font-size:20px">
         <span class="label label-danger">@Model.ErrMessage</span>
     </div>
-
     <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
         <div class="validation" asp-validation-summary="ModelOnly"></div>
         <div>
@@ -38,4 +37,9 @@
             <h1>Hello @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Name")?.Value!</h1>
             <p>Username: @HttpContextAccessor.HttpContext.User.Identity.Name</p>
         </div>
-    </div>}
+
+        <a asp-page-handler="Logout" asp-anti-forgery="true">
+            Выйти
+        </a>
+    </div>
+}

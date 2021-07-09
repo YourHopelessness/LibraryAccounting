@@ -10,6 +10,8 @@ using LibraryAccounting.BL.Dto;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryAccounting.Pages.Account
 {
@@ -27,9 +29,8 @@ namespace LibraryAccounting.Pages.Account
         /// </summary>
         [BindProperty(SupportsGet = true)]
         public LoginModel Auth { get; set; }
-
         [TempData]
-        public string ErrMessage {get; set;}
+        public string ErrMessage { get; set; }
 
         /// <summary>
         /// Конструктор страницы с DI
@@ -42,32 +43,45 @@ namespace LibraryAccounting.Pages.Account
             _config = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
+        /// <summary>
+        /// Просмотр контента на странице
+        /// </summary>
         public void OnGet()
         {
             if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
                 Redirect("/Index");
             }
+            else
+            {
+                ErrMessage ??= "Войдите чтобы просматривать контент";
+            }
         }
+        /// <summary>
+        /// Вход в аккаунт
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> OnPostAsync()
         {
             EmployeeLoginDto employee = await _auth.EmployeeLoginInfo(Auth.UserName, Auth.Password); 
             if (employee != null)
             {
                 await _auth.Autentificate(employee.EmployeeUsername, employee.EmployeeName, employee.Role); // аутентификация
-                return RedirectToPage("/Index");
+                return RedirectToPage();
             }
             else
             {
                 ErrMessage = "Введены неверные регистрационные данные";
-                ModelState.AddModelError("Error", "Введены неверные регистрационные данные");
                 return RedirectToPage();
             }
         }
-
-        public async Task<IActionResult> Logout()
+        /// <summary>
+        /// Выход из аккаунта
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> OnGetLogoutAsync()
         {
-            //await _httpContextAccessor.HttpContext.Session.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToPage();
         }
     }
