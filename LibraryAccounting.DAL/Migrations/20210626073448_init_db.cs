@@ -191,7 +191,7 @@ namespace LibraryAccounting.Migrations
                 name: "auth");
 
             migrationBuilder.DropTable(
-                name: "Changes");
+                name: "changes");
 
             migrationBuilder.DropTable(
                 name: "Reservations");
@@ -206,7 +206,7 @@ namespace LibraryAccounting.Migrations
                 name: "employees");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "roles");
 
             migrationBuilder.DropTable(
                 name: "books_statuses");

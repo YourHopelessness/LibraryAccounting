@@ -15,14 +15,14 @@ namespace LibraryAccounting.DAL.Repositories
     /// <typeparam name="Entity">Тип сущности, передаваемый при инициализации, для которого создается репозиторий</typeparam>
     public class EntityRepository<Entity> where Entity : class
     {
-        private readonly LibraryDbContext _dbContext; // текущий контекст для работы с бд
+        private readonly BaseLibraryContext _dbContext; // текущий контекст для работы с бд
         private readonly DbSet<Entity> _entitySet; // текущий набор сущностей
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="context">Контекст для работы с базой данных</param>
-        public EntityRepository(LibraryDbContext context)
+        public EntityRepository(BaseLibraryContext context)
         {
             _dbContext = context;
             _entitySet = _dbContext.Set<Entity>();
@@ -35,10 +35,9 @@ namespace LibraryAccounting.DAL.Repositories
         /// <param name="properties">Массив параметров, по которым производиться выборка</param>
         /// <exception>Генерирует исключение EntityException, если параметр выборки указан неверно</exception>
         /// <returns>Вовзращает набор кортежей по условию поиска</returns>
-        public virtual IEnumerable<Entity> Get(
-            Expression<Func<Entity, bool>> filter = null,
-            Func<IQueryable<Entity>, IOrderedQueryable<Entity>> orderBy = null,
-            string[] properties = null)
+        public virtual IEnumerable<Entity> Get(Expression<Func<Entity, bool>> filter = null,
+                                               Func<IQueryable<Entity>, IOrderedQueryable<Entity>> orderBy = null,
+                                               string[] properties = null)
         {
             IQueryable<Entity> query = _entitySet; // текущий запрос
 
@@ -61,7 +60,6 @@ namespace LibraryAccounting.DAL.Repositories
                     }
                 }
             }
-
             if (orderBy != null)
             {
                 return orderBy(query).ToList(); // сортировка по параметру
@@ -71,15 +69,7 @@ namespace LibraryAccounting.DAL.Repositories
                 return query.ToList();
             }
         }
-        /// <summary>
-        /// Функция поиска по идентификатору
-        /// </summary>
-        /// <param name="id">Идентификатор</param>
-        /// <returns>Возвращает конкретный объект - кортеж в базе данных, по данному id</returns>
-        public virtual Entity GetByID(object id)
-        {
-            return _entitySet.Find(id);
-        }
+
         /// <summary>
         /// CRUD операция вставки в базу данных
         /// </summary>
@@ -88,15 +78,7 @@ namespace LibraryAccounting.DAL.Repositories
         {
             _entitySet.Add(entity);
         }
-        /// <summary>
-        /// CRUD операция удаления по идентификатору
-        /// </summary>
-        /// <param name="id">Идентификатор кортежа в бд</param>
-        public virtual void Delete(object id)
-        {
-            Entity entityToDelete = _entitySet.Find(id);
-            Delete(entityToDelete);
-        }
+
         /// <summary>
         /// CRUD операция удаления
         /// </summary>

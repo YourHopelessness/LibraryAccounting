@@ -5,9 +5,9 @@
 
 <h1>@ViewData["Title"]</h1>
 <div style="font-size:20px">
-    <span class="label label-success">@Model.Result</span>
+    <span class="label label-success"></span>
 </div>
-@if (Model.Library == null)
+@if (Model.BooksList == null)
 {
     <p><em>Нет ни одного элемента для показа</em></p> 
 }
@@ -50,69 +50,38 @@ else
                     <thead>
                         <tr>
                             <th>
-                                <a class="sort-link" asp-route-sortby="ISBN">
-                                    @Html.DisplayNameFor(model => model.Library.First().ISBN)
-                                </a>
+                                    @Html.ActionLink(@Html.DisplayNameFor(model => model.BooksList.First().ISBN), "Index", new { sortOrder = ViewBag.IsbnSortParm })
                             </th>
                             <th>
                                 <a class="sort-link" asp-route-sortby="Title">
-                                    @Html.DisplayNameFor(model => model.Library.First().Title)
+                                    @Html.DisplayNameFor(model => model.BooksList.First().Title)
                                 </a>
                             </th>
                             <th>
                                 <a class="sort-link" asp-route-sortby="Author">
-                                    @Html.DisplayNameFor(model => model.Library.First().Author)
+                                    @Html.DisplayNameFor(model => model.BooksList.First().Author)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby="PublishedDate">
-                                    @Html.DisplayNameFor(model => model.Library.First().PublishedDate)
+                                <a class="sort-link" asp-route-sortby="PublishedDate" >
+                                    @Html.DisplayNameFor(model => model.BooksList.First().PublishedDate)
                                 </a>
                             </th>
                             <th>
                                 <a class="sort-link" asp-route-sortby="PublishedBy">
-                                    @Html.DisplayNameFor(model => model.Library.First().PublishedBy)
+                                    @Html.DisplayNameFor(model => model.BooksList.First().PublishedBy)
                                 </a>
                             </th>
                             <th>
                                 <a class="sort-link" asp-route-sortby="Status">
-                                    @Html.DisplayNameFor(model => model.Library.First().Status)
+                                    @Html.DisplayNameFor(model => model.BooksList.First().Status)
                                 </a>
                             </th>
-                            <th>
-                                <a class="sort-link" asp-route-sortby="Reader">
-                                    @Html.DisplayNameFor(model => model.Library.First().Reader)
-                                </a>
-                            </th>
-                            <th>
-                                <a class="sort-link" asp-route-sortby="ReservationDate">
-                                    @Html.DisplayNameFor(model => model.Library.First().ReservationDate)
-                                </a>
-                            </th>
-                            <th>
-                                <a class="sort-link" asp-route-sortby="ReturningDate">
-                                    @Html.DisplayNameFor(model => model.Library.First().ReturningDate)
-                                </a>
-                            </th>
-                            <th>
-                                <a class="sort-link" asp-route-sortby="ChangeDate">
-                                    @Html.DisplayNameFor(model => model.Library.First().ChangeDate)
-                                </a>
-                            </th>
-                            <th>
-                                <a class="sort-link" asp-route-sortby="Changemaker">
-                                    @Html.DisplayNameFor(model => model.Library.First().Changemaker)
-                                </a>
-                            </th>
-                            <th>
-                                <a class="sort-link" asp-route-sortby="Comment">
-                                    @Html.DisplayNameFor(model => model.Library.First().Comment)
-                                </a>
-                            </th>
+                            
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var book in Model.Library)
+                        @foreach (var book in Model.BooksList)
                         {
                             <tr>
                                 <td>@book.ISBN</td>
@@ -121,12 +90,6 @@ else
                                 <td>@book.PublishedDate</td>
                                 <td>@book.PublishedBy</td>
                                 <td>@book.Status</td>
-                                <td>@book.Reader</td>
-                                <td>@book.ReservationDate</td>
-                                <td>@book.ReturningDate</td>
-                                <td>@book.ChangeDate</td>
-                                <td>@book.Changemaker</td>
-                                <td>@book.Comment</td>
                                 <td>
                                     <a asp-page="./EditBook" asp-route-id="@book.BookId">Редактировать</a> |
                                     <a asp-page="./BookStat" asp-route-id="@book.BookId">Статистика</a> |

@@ -4,12 +4,153 @@
         <name>LibraryAccounting.BL</name>
     </assembly>
     <members>
-        <member name="T:LibraryAccounting.BL.Services.IBooksVisable">
+        <member name="T:LibraryAccounting.BL.Dto.BookInReservationsDto">
+            <summary>
+            Информация по бронированию одной книги
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.Book">
+            книга
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.Readers">
+            сотрудники, бравшие книгу
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.ReservationDate">
+            дата выдачи
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.ReturningDate">
+            дата сдачи, отстутвует, если книга утеряна
+        </member>
+        <member name="T:LibraryAccounting.BL.Dto.BooksDto">
+            <summary>
+            Информацие по книге
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BooksDto.BookId">
+            ид книги
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BooksDto.ISBN">
+            код книги (может не быть)
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BooksDto.Title">
+            название
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BooksDto.Author">
+            автор
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BooksDto.PublishedBy">
+            издательство
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BooksDto.PublishedDate">
+            год издания книги
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BooksDto.Status">
+            текущий статус книги
+        </member>
+        <member name="T:LibraryAccounting.BL.Dto.ChangesDto">
+            <summary>
+            Дто собирает данные с табцы изменений
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ChangesDto.ChangemakerId">
+            идентификатор автора
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ChangesDto.BookId">
+            идентификатор изменнной книги
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ChangesDto.ChangemakerFullName">
+            автор изменений
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ChangesDto.ChangeDate">
+            дата измений
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ChangesDto.Comment">
+            комментарий
+        </member>
+        <member name="T:LibraryAccounting.BL.Dto.EmployeeLoginDto">
+            <summary>Дто содержащее данные аутентификации и роли пользователя</summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.EmployeeLoginDto.EmployeeId">
+            <summary>идентификатор читателя</summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.EmployeeLoginDto.EmployeeUsername">
+            <summary>Ник сотрудника</summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.EmployeeLoginDto.EmployeeName">
+            <summary>Имя сотрудника</summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.EmployeeLoginDto.Password">
+            <summary>Пароль</summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.EmployeeLoginDto.Salt">
+            <summary>Персональная соль</summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.EmployeeLoginDto.Role">
+            <summary>Роль сотрудника</summary>
+        </member>
+        <member name="T:LibraryAccounting.BL.Dto.ReadersDto">
+            <summary> Личная карточка читателя</summary>
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ReadersDto.ReaderId">
+            идентификатор читателя
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ReadersDto.BooksInOwn">
+            книги в личной библиотеке
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ReadersDto.ReaderName">
+            имя читателя
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ReadersDto.ReaderWorkEmail">
+            рабочая почта
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ReadersDto.ReaderPersonalEmail">
+            личная почта
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.ReadersDto.ReaderPhone">
+            телефон
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.IAuthenticable">
+            <summary>
+            Интерфейс аутентификации
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IAuthenticable.EmployeeLoginInfo(System.String,System.String)">
+            <summary>
+            Получение аутентификационных данных пользователя
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IAuthenticable.Autentificate(System.String,System.String,System.String)">
+            <summary>
+            Метод аутентификации пользователя
+            </summary>
+            <param name="username"></param>
+            <param name="employeeName"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.AuthService">
+            <summary>
+            Сервис аутентификации
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.AuthService.EmployeeLoginInfo(System.String,System.String)">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.AuthService.Autentificate(System.String,System.String,System.String)">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.IEmployeesStatable">
+            <summary>
+            Интерфейс работы с сотрудниками
+            </summary>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.ILibraryCurrentable">
             <summary>
             Интерфейс для сервиса показа книг
             </summary>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.IBooksVisable.GetBooks(System.Int32,System.Int32,System.String)">
+        <member name="M:LibraryAccounting.BL.Services.ILibraryCurrentable.GetBooks">
             <summary>
             Получение списка имеющихся книг
             </summary>
@@ -18,28 +159,25 @@
             <param name="field"></param>
             <returns>Список книг</returns>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.IBooksVisable.GetCount">
+        <member name="M:LibraryAccounting.BL.Services.ILibraryCurrentable.GetCount">
             <summary>
             Получение длины массива книг
             </summary>
             <returns></returns>
         </member>
-        <member name="T:LibraryAccounting.BL.Services.BooksListService">
-            <summary>
-            Сервис показа списка книг и работы с ним
-            </summary>
+        <member name="T:LibraryAccounting.BL.Services.LibraryStateService">
+            <summary>Сервис показа списка книг и работы с ним</summary>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.BooksListService.#ctor(LibraryAccounting.DAL.DB.LibraryDbContext)">
-            <summary>
-            Конструктор со внедрением зависимости контекста базы данных
-            </summary>
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper)">
+            <summary>Конструктор со внедрением зависимости контекста базы данных </summary>
             <param name="context">Контекст базы данных</param>
+            <param name="mapper">Карты для маппера</param>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.BooksListService.GetCount">
-            <inherets></inherets>>
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetCount">
+            <inheritdoc></inheritdoc>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.BooksListService.GetBooks(System.Int32,System.Int32,System.String)">
-            <inherets></inherets>>
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetBooks">
+            <inheritdoc></inheritdoc>
         </member>
     </members>
 </doc>

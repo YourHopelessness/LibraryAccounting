@@ -6,14 +6,10 @@ using System.Configuration;
 
 namespace LibraryAccounting.DAL.DB
 {
-    /// <summary>
-    /// Конфигурация контекста базы данных
-    /// </summary>
+    /// <summary> Конфигурация контекста базы данных </summary>
     public class DbConfig
     {
-        /// <summary>
-        /// Получеине строки подключения
-        /// </summary>
+        /// <summary> Получеине строки подключения</summary>
         /// <returns>Возвращает строку подключения</returns>
         public static string GetConnectionString()
         {

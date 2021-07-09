@@ -5,15 +5,54 @@
     </assembly>
     <members>
         <member name="T:LibraryAccounting.DAL.DB.DbConfig">
-            <summary>
-            Конфигурация контекста базы данных
-            </summary>
+            <summary> Конфигурация контекста базы данных </summary>
         </member>
         <member name="M:LibraryAccounting.DAL.DB.DbConfig.GetConnectionString">
-            <summary>
-            Получеине строки подключения
-            </summary>
+            <summary> Получеине строки подключения</summary>
             <returns>Возвращает строку подключения</returns>
+        </member>
+        <member name="M:LibraryAccounting.DAL.DB.BaseLibraryContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{LibraryAccounting.DAL.DB.LibraryDbContext})">
+            <summary> Конструктор создания контекста с помощью внедрения зависимости</summary>
+            <param name="options">Параметр для внедрения зависимости</param>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.Logins">
+            <summary>Таблица явок-паролей</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.Employees">
+            <summary>Справочниик сотрудников </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.Reservations">
+            <summary>Таблица бронирования</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.Changes">
+            <summary>Таблица изменений</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.BooksStatuses">
+            <summary> Справочник статусов книг </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.Roles">
+            <summary>Справочник ролей</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.UserRoles">
+            <summary>Таблица ролей сотрудников </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.DB.BaseLibraryContext.Books">
+            <summary>Таблица книг</summary>
+        </member>
+        <member name="M:LibraryAccounting.DAL.DB.BaseLibraryContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="T:LibraryAccounting.DAL.DB.LibraryDbContext">
+            <summary> Главный контекст базы данных</summary>
+        </member>
+        <member name="M:LibraryAccounting.DAL.DB.LibraryDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{LibraryAccounting.DAL.DB.LibraryDbContext})">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.DAL.DB.LibraryDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.DAL.DB.LibraryDbContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <inheritdoc></inheritdoc>>
         </member>
         <member name="T:LibraryAccounting.DAL.DB.LibraryContextFactory">
             <summary>
@@ -27,62 +66,35 @@
             <param name="args"></param>
             <returns>Контекст базы данных</returns>
         </member>
-        <member name="T:LibraryAccounting.DAL.DB.LibraryDbContext">
-            <summary>
-            Главный контекст базы данных
-            </summary>
+        <member name="T:LibraryAccounting.DAL.Entities.DbLogin">
+            <summary>Таблица аутентификации</summary>
         </member>
-        <member name="M:LibraryAccounting.DAL.DB.LibraryDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{LibraryAccounting.DAL.DB.LibraryDbContext})">
-            <summary>
-            Конструктор создания контекста с помощью внедрения зависимости
-            </summary>
-            <param name="options">Параметр для внедрения зависимости</param>
+        <member name="P:LibraryAccounting.DAL.Entities.DbLogin.UserName">
+            <summary>Ник</summary>
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.Logins">
-            <summary>
-            Таблица явок-паролей
-            </summary>
+        <member name="P:LibraryAccounting.DAL.Entities.DbLogin.EmployeeId">
+            <summary>Идентификатор сотрудника</summary>
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.Employees">
-            <summary>
-            Справочниик сотрудников
-            </summary>
+        <member name="P:LibraryAccounting.DAL.Entities.DbLogin.Password">
+            <summary>Пароль</summary>
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.Reservations">
-            <summary>
-            Таблица бронирования
-            </summary>
+        <member name="P:LibraryAccounting.DAL.Entities.DbLogin.Salt">
+            <summary>Соль</summary>
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.Changes">
-            <summary>
-            Таблица изменений
-            </summary>
+        <member name="T:LibraryAccounting.DAL.Repositories.EntityException">
+            Класс-исключение
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.BooksStatuses">
-            <summary>
-            Справочник статусов книг
-            </summary>
+        <member name="M:LibraryAccounting.DAL.Repositories.EntityException.#ctor">
+            <inheritdoc></inheritdoc>>
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.Roles">
-            <summary>
-            Справочник ролей
-            </summary>
+        <member name="M:LibraryAccounting.DAL.Repositories.EntityException.#ctor(System.String)">
+            <inheritdoc></inheritdoc>>
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.UserRoles">
-            <summary>
-            Таблица ролей сотрудников
-            </summary>
+        <member name="M:LibraryAccounting.DAL.Repositories.EntityException.#ctor(System.String,System.Exception)">
+            <inheritdoc></inheritdoc>>
         </member>
-        <member name="P:LibraryAccounting.DAL.DB.LibraryDbContext.Books">
-            <summary>
-            Таблица книг
-            </summary>
-        </member>
-        <member name="M:LibraryAccounting.DAL.DB.LibraryDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <summary>
-            Фунция EF для создания базы данных
-            </summary>
-            <param name="modelBuilder"></param>
+        <member name="M:LibraryAccounting.DAL.Repositories.EntityException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <inheritdoc></inheritdoc>>
         </member>
         <member name="T:LibraryAccounting.DAL.Repositories.EntityRepository`1">
             <summary>
@@ -90,7 +102,7 @@
             </summary>
             <typeparam name="Entity">Тип сущности, передаваемый при инициализации, для которого создается репозиторий</typeparam>
         </member>
-        <member name="M:LibraryAccounting.DAL.Repositories.EntityRepository`1.#ctor(LibraryAccounting.DAL.DB.LibraryDbContext)">
+        <member name="M:LibraryAccounting.DAL.Repositories.EntityRepository`1.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext)">
             <summary>
             Конструктор
             </summary>
@@ -106,24 +118,11 @@
             <exception>Генерирует исключение EntityException, если параметр выборки указан неверно</exception>
             <returns>Вовзращает набор кортежей по условию поиска</returns>
         </member>
-        <member name="M:LibraryAccounting.DAL.Repositories.EntityRepository`1.GetByID(System.Object)">
-            <summary>
-            Функция поиска по идентификатору
-            </summary>
-            <param name="id">Идентификатор</param>
-            <returns>Возвращает конкретный объект - кортеж в базе данных, по данному id</returns>
-        </member>
         <member name="M:LibraryAccounting.DAL.Repositories.EntityRepository`1.Insert(`0)">
             <summary>
             CRUD операция вставки в базу данных
             </summary>
             <param name="entity">Объект, представляющий кортеж, который вносится в базу данных</param>
-        </member>
-        <member name="M:LibraryAccounting.DAL.Repositories.EntityRepository`1.Delete(System.Object)">
-            <summary>
-            CRUD операция удаления по идентификатору
-            </summary>
-            <param name="id">Идентификатор кортежа в бд</param>
         </member>
         <member name="M:LibraryAccounting.DAL.Repositories.EntityRepository`1.Delete(`0)">
             <summary>
@@ -142,33 +141,37 @@
             Класс паттерна Unit of Work
             </summary>
         </member>
-        <member name="M:LibraryAccounting.DAL.Repositories.LibraryUOW.#ctor(LibraryAccounting.DAL.DB.LibraryDbContext)">
+        <member name="M:LibraryAccounting.DAL.Repositories.LibraryUOW.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext)">
             <summary>
             Конструктор
             </summary>
         </member>
         <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.Books">
-            <summary>
-            Синглтон репозитория таблицы книг
-            </summary>
+            <summary>Синглтон репозитория таблицы книг</summary>
         </member>
         <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.Reservations">
-            <summary>
-            Синглтон репозитория таблицы бронирования
-            </summary>
+            <summary> Синглтон репозитория таблицы бронирования</summary>
         </member>
         <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.Changes">
-            <summary>
-            Синглтон репозитория таблицы изменений
-            </summary>
+            <summary> Синглтон репозитория таблицы изменений</summary>
         </member>
         <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.Employees">
-            <summary>
-            Синглтон репозитория справочника сотрудников
-            </summary>
+            <summary>Синглтон репозитория справочника сотрудников</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.BooksStatuses">
+            <summary>Синглтон репозитория справочника статусов книг</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.Logins">
+            <summary>Синглтон репозитория данных аутентификации</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.UserRoles">
+            <summary>Синглтон репозитория ролей пользователей</summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Repositories.LibraryUOW.Roles">
+            <summary>Синглтон репозитория ролей</summary>
         </member>
         <member name="M:LibraryAccounting.DAL.Repositories.LibraryUOW.Save">
-            Сохрание в базу данных
+            <summary>Сохрание в базу данных</summary>
         </member>
         <member name="M:LibraryAccounting.DAL.Repositories.LibraryUOW.Dispose(System.Boolean)">
             <summary>

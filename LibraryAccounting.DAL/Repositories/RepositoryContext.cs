@@ -13,82 +13,55 @@ namespace LibraryAccounting.DAL.Repositories
    /// </summary>
     public class LibraryUOW
     {
-        private readonly LibraryDbContext _db;
+        private readonly BaseLibraryContext _db;
         private bool disposed = false;
         private EntityRepository<Changes> changes;
         private EntityRepository<Reservations> reservations;
         private EntityRepository<Books> books;
         private EntityRepository<Employees> employees;
+        private EntityRepository<BooksStatuses> booksStatuses;
+        private EntityRepository<DbLogin> logins;
+        private EntityRepository<UserRoles> userroles;
+        private EntityRepository<Roles> roles;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public LibraryUOW(LibraryDbContext context)
+        public LibraryUOW(BaseLibraryContext context)
         {
             _db = context;
         }
-        /// <summary>
-        /// Синглтон репозитория таблицы книг
-        /// </summary>
-        public EntityRepository<Books> Books 
-        {
-            get
-            {
-                if (books == null)
-                {
-                    books = new EntityRepository<Books>(_db);
-                }
-                return books;
-            }
-        }
-        /// <summary>
-        /// Синглтон репозитория таблицы бронирования
-        /// </summary>
-        public EntityRepository<Reservations> Reservations 
-        {
-            get
-            {
-                if (reservations == null)
-                {
-                    reservations = new EntityRepository<Reservations>(_db);
-                }
-                return reservations;
-            }
-        }
-        /// <summary>
-        /// Синглтон репозитория таблицы изменений
-        /// </summary>
-        public EntityRepository<Changes> Changes 
-        { 
-            get
-            {
-                if (changes == null)
-                {
-                    changes = new EntityRepository<Changes>(_db);
-                }
-                return changes;
-            }
-        }
-        /// <summary>
-        /// Синглтон репозитория справочника сотрудников
-        /// </summary>
-        public EntityRepository<Employees> Employees
-        {
-            get
-            {
-                if (employees == null)
-                {
-                    employees = new EntityRepository<Employees>(_db);
-                }
-                return employees;
-            }
-        }
 
-        /// Сохрание в базу данных
+        /// <summary>Синглтон репозитория таблицы книг</summary>
+        public EntityRepository<Books> Books { get => books ??= new EntityRepository<Books>(_db); }
+
+        /// <summary> Синглтон репозитория таблицы бронирования</summary>
+        public EntityRepository<Reservations> Reservations { get => reservations ??= new EntityRepository<Reservations>(_db); }
+
+        /// <summary> Синглтон репозитория таблицы изменений</summary>
+        public EntityRepository<Changes> Changes { get => changes ??= new EntityRepository<Changes>(_db); }
+
+        /// <summary>Синглтон репозитория справочника сотрудников</summary>
+        public EntityRepository<Employees> Employees { get => employees ??= new EntityRepository<Employees>(_db); }
+
+        /// <summary>Синглтон репозитория справочника статусов книг</summary>
+        public EntityRepository<BooksStatuses> BooksStatuses { get => booksStatuses ??= new EntityRepository<BooksStatuses>(_db); }
+
+        /// <summary>Синглтон репозитория данных аутентификации</summary>
+        public EntityRepository<DbLogin> Logins { get => logins ??= new EntityRepository<DbLogin>(_db); }
+
+        /// <summary>Синглтон репозитория ролей пользователей</summary>
+        public EntityRepository<UserRoles> UserRoles { get => userroles ??= new EntityRepository<UserRoles>(_db); }
+
+        /// <summary>Синглтон репозитория ролей</summary>
+        public EntityRepository<Roles> Roles { get => roles ??= new EntityRepository<Roles>(_db); }
+
+        /// <summary>Сохрание в базу данных</summary>
         public void Save()
         {
             _db.SaveChanges();
         }
+
         /// <summary>
         /// Функция для уничтожения репозиториев
         /// </summary>
@@ -104,6 +77,7 @@ namespace LibraryAccounting.DAL.Repositories
                 disposed = true;
             }
         }
+
         /// <summary>
         /// Уничтожение объектов
         /// </summary>

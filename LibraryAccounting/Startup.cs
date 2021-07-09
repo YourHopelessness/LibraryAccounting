@@ -15,37 +15,58 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace LibraryAccounting
 {
+    /// <summary>
+    /// Основной класс приложения
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Точка запуска приложения
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+        /// <summary>
+        /// Свойство конфигурации
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// <summary>
+        /// Конфигурация сервисов
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddServerSideBlazor();
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-            services.AddDbContext<LibraryDbContext>(options => options.UseNpgsql(DbConfig.GetConnectionString()));
-            services.AddScoped<BooksListService>();
-            services.AddScoped<IBooksVisable, BooksListService>();
+            services.AddHttpContextAccessor();
+            services.AddDbContext<BaseLibraryContext, LibraryDbContext>(); // Добавляем контекст бд
+            services.AddScoped<IAuthenticable, AuthService>();
+            services.AddScoped<ILibraryCurrentable, LibraryStateService>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+                        options.LoginPath = new PathString("/Account/Login");
+                        options.AccessDeniedPath = new PathString("/Account/Login");
+                    });
+            services.AddAutoMapper(typeof(MapperConfigurateMap));
             services.AddRazorPages(options =>
            {
            });
+            services.AddMemoryCache();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Конфигруация приложения
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -60,9 +81,15 @@ namespace LibraryAccounting
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                CheckConsentNeeded = context => true,
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+            };
+            app.UseCookiePolicy(cookiePolicyOptions);
             app.UseRouting();
 
+            app.UseAuthentication();    // аутентификация
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

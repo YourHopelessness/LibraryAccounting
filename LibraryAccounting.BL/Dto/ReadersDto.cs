@@ -1,19 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LibraryAccounting.BL.Dto
 {
-    class ReadersDto
+    /// <summary> Личная карточка читателя</summary>
+    public class ReadersDto
     {
+        /// идентификатор читателя
         public Guid ReaderId { get; set; }
-        public Guid BookId { get; set; }
+
+        /// книги в личной библиотеке
+        public List<BooksDto> BooksInOwn { get; set; }
+
+        /// имя читателя
         public string ReaderName { get; set; }
+
+        /// рабочая почта
         public string ReaderWorkEmail { get; set; }
+
+        /// личная почта
         public string ReaderPersonalEmail { get; set; }
-        public DateTime ReservationDate { get; set; }
-        public DateTime ReturningDate { get; set; }
+
+        /// телефон
+        public string ReaderPhone { get; set; }
     }
 }

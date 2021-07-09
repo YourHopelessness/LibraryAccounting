@@ -19,7 +19,7 @@ namespace LibraryAccounting.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("LibraryAccounting.Entities.Books", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Books", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,6 +32,7 @@ namespace LibraryAccounting.Migrations
                         .HasColumnName("author");
 
                     b.Property<string>("ISBN")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("isbn");
 
@@ -62,7 +63,7 @@ namespace LibraryAccounting.Migrations
                     b.ToTable("books");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.BooksStatuses", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.BooksStatuses", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +81,7 @@ namespace LibraryAccounting.Migrations
                     b.ToTable("books_statuses");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.Changes", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Changes", b =>
                 {
                     b.Property<Guid>("ChangemakerId")
                         .HasColumnType("uuid")
@@ -90,7 +91,7 @@ namespace LibraryAccounting.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("book_id");
 
-                    b.Property<DateTime>("ChangeDate")
+                    b.Property<DateTime?>("ChangeDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("change_date");
 
@@ -102,10 +103,10 @@ namespace LibraryAccounting.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Changes");
+                    b.ToTable("changes");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.DbLogin", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.DbLogin", b =>
                 {
                     b.Property<string>("UserName")
                         .HasColumnType("text")
@@ -119,6 +120,11 @@ namespace LibraryAccounting.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("employee_id");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("salt")
+                        .HasColumnType("text");
+
                     b.HasKey("UserName", "Password", "EmployeeId");
 
                     b.HasIndex("EmployeeId");
@@ -126,7 +132,7 @@ namespace LibraryAccounting.Migrations
                     b.ToTable("auth");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.Emloyees", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Employees", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,7 +172,7 @@ namespace LibraryAccounting.Migrations
                     b.ToTable("employees");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.Reservations", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Reservations", b =>
                 {
                     b.Property<Guid>("ReaderId")
                         .HasColumnType("uuid")
@@ -187,7 +193,8 @@ namespace LibraryAccounting.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
-                    b.Property<bool>("ReturningFlag")
+                    b.Property<bool?>("ReturningFlag")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false)
@@ -195,10 +202,10 @@ namespace LibraryAccounting.Migrations
 
                     b.HasKey("ReaderId", "BookId", "ReservationDate", "ReturnDate");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("reservations");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.Roles", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Roles", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -217,68 +224,69 @@ namespace LibraryAccounting.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("roles");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.UserRoles", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.UserRoles", b =>
                 {
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uuid")
                         .HasColumnName("employee_id");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
+                        .IsRequired()
                         .HasColumnType("integer")
                         .HasColumnName("role_id");
 
-                    b.HasKey("EmployeeId", "RoleId");
+                    b.HasKey("EmployeeId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("user_roles");
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.Books", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Books", b =>
                 {
-                    b.HasOne("LibraryAccounting.Entities.BooksStatuses", null)
+                    b.HasOne("LibraryAccounting.DAL.Entities.BooksStatuses", null)
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.Changes", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Changes", b =>
                 {
-                    b.HasOne("LibraryAccounting.Entities.Books", null)
+                    b.HasOne("LibraryAccounting.DAL.Entities.Books", null)
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryAccounting.Entities.Emloyees", null)
+                    b.HasOne("LibraryAccounting.DAL.Entities.Employees", null)
                         .WithMany()
                         .HasForeignKey("ChangemakerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.DbLogin", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.DbLogin", b =>
                 {
-                    b.HasOne("LibraryAccounting.Entities.Emloyees", null)
+                    b.HasOne("LibraryAccounting.DAL.Entities.Employees", null)
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LibraryAccounting.Entities.UserRoles", b =>
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.UserRoles", b =>
                 {
-                    b.HasOne("LibraryAccounting.Entities.Emloyees", null)
+                    b.HasOne("LibraryAccounting.DAL.Entities.Employees", null)
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryAccounting.Entities.Roles", null)
+                    b.HasOne("LibraryAccounting.DAL.Entities.Roles", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

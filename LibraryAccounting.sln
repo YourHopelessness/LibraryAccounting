@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAccounting", "LibraryAccounting\LibraryAccounting.csproj", "{9FFA7DDA-FC15-4F76-8C2F-3BBE2382C560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryAccounting.DAL", "LibraryAccounting.DAL\LibraryAccounting.DAL.csproj", "{FF6036A3-7EE4-4380-AEF2-92FA69EFD316}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAccounting.DAL", "LibraryAccounting.DAL\LibraryAccounting.DAL.csproj", "{FF6036A3-7EE4-4380-AEF2-92FA69EFD316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryAccounting.BL", "LibraryAccounting.BL\LibraryAccounting.BL.csproj", "{930AE341-0BAF-4587-894C-C8BB2C985917}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAccounting.BL", "LibraryAccounting.BL\LibraryAccounting.BL.csproj", "{930AE341-0BAF-4587-894C-C8BB2C985917}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryAccounting.Test", "LibraryAccounting.Test\LibraryAccounting.Test.csproj", "{7FC3C1EC-1DDA-45A9-97AF-533ECD40CA30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAccounting.Test", "LibraryAccounting.Test\LibraryAccounting.Test.csproj", "{7FC3C1EC-1DDA-45A9-97AF-533ECD40CA30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

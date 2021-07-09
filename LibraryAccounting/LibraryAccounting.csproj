@@ -32,6 +32,12 @@
     <None Remove="Services\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Pages\Admin\Stats.cshtml" />
+    <Content Remove="Pages\Admin\Users.cshtml" />
+    <Content Remove="Pages\Admin\_ViewImports.cshtml" />
+  </ItemGroup>
+
   
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
@@ -40,13 +46,13 @@
   
   
   <ItemGroup>
-    <None Include="Pages\OtherPages\Bio.cshtml" />
-    <None Include="Pages\OtherPages\PersonalBiblio.cshtml" />
+    <None Include="Pages\Admin\Stats.cshtml" />
+    <None Include="Pages\Admin\Users.cshtml" />
+    <None Include="Pages\Admin\_ViewImports.cshtml" />
+    <None Include="Pages\Account\PersonalBiblio.cshtml" />
     <None Include="Pages\Error.cshtml" />
     <None Include="Pages\Index.cshtml" />
-    <None Include="Pages\OtherPages\Admin\Stats.cshtml" />
-    <None Include="Pages\OtherPages\Admin\Users.cshtml" />
-    <None Include="Pages\OtherPages\_ViewImports.cshtml" />
+    <None Include="Pages\Account\_ViewImports.cshtml" />
     <None Include="Pages\Shared\_CookieConsentPartial.cshtml" />
     <None Include="Pages\Shared\_Layout.cshtml" />
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
