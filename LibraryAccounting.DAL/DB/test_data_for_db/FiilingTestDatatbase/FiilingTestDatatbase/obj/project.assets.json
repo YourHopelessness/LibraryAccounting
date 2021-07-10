@@ -5187,11 +5187,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\FiilingTestDatatbase.csproj",
+      "projectUniqueName": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting.DAL\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\FiilingTestDatatbase.csproj",
       "projectName": "FiilingTestDatatbase",
-      "projectPath": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\FiilingTestDatatbase.csproj",
+      "projectPath": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting.DAL\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\FiilingTestDatatbase.csproj",
       "packagesPath": "C:\\Users\\jiraf\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\obj\\",
+      "outputPath": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting.DAL\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

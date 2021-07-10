@@ -81,6 +81,27 @@
         <member name="P:LibraryAccounting.DAL.Entities.DbLogin.Salt">
             <summary>Соль</summary>
         </member>
+        <member name="T:LibraryAccounting.DAL.Entities.Reservations">
+            <summary>бронирование </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Reservations.ReaderId">
+            <summary>читатель </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Reservations.BookId">
+            <summary>книга </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Reservations.ReservationDate">
+            <summary>время брони </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Reservations.ReturnDate">
+            <summary>время вовзращения </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Reservations.ReturningFlag">
+            <summary>флаг возвращения </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Reservations.Comment">
+            <summary>комментарий к брони </summary>
+        </member>
         <member name="T:LibraryAccounting.DAL.Repositories.EntityException">
             Класс-исключение
         </member>

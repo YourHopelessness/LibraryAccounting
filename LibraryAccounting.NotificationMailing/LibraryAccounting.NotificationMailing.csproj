@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-LibraryAccounting.NotificationMailing-2A373F25-57C1-4469-9352-1F35173254E5</UserSecretsId>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryAccounting.BL\LibraryAccounting.BL.csproj" />
+    <ProjectReference Include="..\LibraryAccounting.DAL\LibraryAccounting.DAL.csproj" />
+  </ItemGroup>
+</Project>

@@ -9,13 +9,13 @@ namespace LibraryAccounting.BL.Dto
     /// <summary>
     /// Информация по бронированию одной книги
     /// </summary>
-    class BookInReservationsDto
+    public class BookInReservationsDto
     {
         /// книга
-        public BooksDto Book { get; set; }
+        public Guid BookId { get; set; }
 
         /// сотрудники, бравшие книгу
-        public ReadersDto Readers { get; set; }
+        public Guid ReaderId { get; set; }
 
         /// дата выдачи
         public DateTime ReservationDate { get; set; }

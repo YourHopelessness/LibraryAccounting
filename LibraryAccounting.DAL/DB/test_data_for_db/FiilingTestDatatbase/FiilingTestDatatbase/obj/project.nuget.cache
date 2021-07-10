@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SmIxvhM4dFq8akt8yLPxM0VgXnP/bScgIwz8MKaykaHNOFc4i+KonR/GTTpXFEyayTeSccCUDPz1nu4gfv0m/g==",
+  "dgSpecHash": "r+K0ZlSMjslz4URPWvuTq/lPPyOIz7+Nh3SiVul62ebgOJfwTeeC4bgrR+He/ffstvoRNPSVVoH2EwY4gNN5KQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\FiilingTestDatatbase.csproj",
+  "projectFilePath": "C:\\Users\\jiraf\\source\\repos\\LibraryAccounting\\LibraryAccounting.DAL\\DB\\test_data_for_db\\FiilingTestDatatbase\\FiilingTestDatatbase\\FiilingTestDatatbase.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jiraf\\.nuget\\packages\\medallionrandom\\1.1.0\\medallionrandom.1.1.0.nupkg.sha512",
     "C:\\Users\\jiraf\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.7\\microsoft.entityframeworkcore.5.0.7.nupkg.sha512",

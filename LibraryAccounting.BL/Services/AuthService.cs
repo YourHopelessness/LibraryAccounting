@@ -55,12 +55,12 @@ namespace LibraryAccounting.BL.Services
         {
             EmployeeLoginDto employee = null;
             var logins = _libraryUOW.Logins.Get(filter: l => l.Password == password && l.UserName == username);
-            if (logins.ToList().Count != 0)
+            if (logins.Result.ToList().Count != 0)
             {
-                employee = _mapper.Map<EmployeeLoginDto>(logins.FirstOrDefault());
-                int? roleId = _libraryUOW.UserRoles.Get(filter: e => e.EmployeeId == employee.EmployeeId).FirstOrDefault().RoleId;
-                employee.Role = _libraryUOW.Roles.Get(filter: r => r.Id == roleId).FirstOrDefault().Name;
-                var empl = _libraryUOW.Employees.Get(filter: e => e.Id == employee.EmployeeId).FirstOrDefault();
+                employee = _mapper.Map<EmployeeLoginDto>(logins.Result.FirstOrDefault());
+                int? roleId = _libraryUOW.UserRoles.Get(filter: e => e.EmployeeId == employee.EmployeeId).Result.FirstOrDefault().RoleId;
+                employee.Role = _libraryUOW.Roles.Get(filter: r => r.Id == roleId).Result.FirstOrDefault().Name;
+                var empl = _libraryUOW.Employees.Get(filter: e => e.Id == employee.EmployeeId).Result.FirstOrDefault();
                 employee.EmployeeName = empl.FirstName + " " + empl.LastName;
             }
             return employee;

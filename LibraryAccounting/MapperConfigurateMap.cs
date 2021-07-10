@@ -21,6 +21,7 @@ namespace LibraryAccounting
             CreateMap<Books, BooksDto>()
                 .ForMember(l => l.BookId, m => m.MapFrom(b => b.Id))
                 .ForMember(l => l.Status, m => m.MapFrom(b => b.StatusId.ToString()))
+                .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate.Date))
                 .ReverseMap();
             CreateMap<BooksDto, BookListModel>()
                 .ReverseMap();
@@ -30,8 +31,10 @@ namespace LibraryAccounting
                 .ForAllOtherMembers(opt => opt.Ignore());
                 CreateMap<Changes, ChangesDto>()
                     .ReverseMap();
+
             CreateMap<Reservations, ReadersDto>()
-            .ReverseMap();
+                .ReverseMap();
+
             CreateMap<Employees, ReadersDto>()
                 .ForMember(dest => dest.ReaderName, m => m.MapFrom(src => src.FirstName + " " + src.LastName))
                 .ForMember(dest => dest.ReaderWorkEmail, m => m.MapFrom(src => src.WorkEmail))

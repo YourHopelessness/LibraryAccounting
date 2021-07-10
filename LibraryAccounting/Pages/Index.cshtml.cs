@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using LibraryAccounting.BL.Services;
 
 namespace LibraryAccounting.Pages
 {
@@ -20,7 +21,9 @@ namespace LibraryAccounting.Pages
         /// <summary>Список отображаемых на станице книг</summary>
         public IEnumerable<BookListModel> BooksList { get; set; }
 
-        private readonly BL.Services.ILibraryCurrentable _library;
+        private readonly ILibraryCurrentable _library;
+        private readonly IReservable _reservations;
+        private readonly IChangeble _changes;
         private readonly IMapper _config;
 
         ///<summary>Текущая страница</summary>
@@ -55,16 +58,23 @@ namespace LibraryAccounting.Pages
         ///<summary>Флаг возможности перехода на последнюю страницу</summary>
         public bool ShowLast => CurrentPage != TotalPages;
         ///<inheritdoc></inheritdoc>
-        public IndexModel(BL.Services.ILibraryCurrentable library, IMapper mapper)
+        public IndexModel(ILibraryCurrentable library,
+                          IMapper mapper,
+                          IChangeble changes,
+                          IReservable reservations)
         {
             _library = library;
             _config = mapper;
+            _changes = changes;
+            _reservations = reservations;
         }
 
         /// <inheritdoc></inheritdoc>
         public async Task OnGetAsync()
         {
             var books = await _library.GetBooks();
+            var reservations = await _reservations.GetReservations();
+            var changes = await _changes.GetChanges();
             BooksList = _config.Map<IEnumerable<BookListModel>>(books);
             Count = await _library.GetCount();
         }

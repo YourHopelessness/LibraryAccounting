@@ -9,10 +9,10 @@
             Информация по бронированию одной книги
             </summary>
         </member>
-        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.Book">
+        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.BookId">
             книга
         </member>
-        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.Readers">
+        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.ReaderId">
             сотрудники, бравшие книгу
         </member>
         <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.ReservationDate">
@@ -140,10 +140,99 @@
         <member name="M:LibraryAccounting.BL.Services.AuthService.Autentificate(System.String,System.String,System.String)">
             <inheritdoc></inheritdoc>
         </member>
+        <member name="T:LibraryAccounting.BL.Services.FixChanges">
+             <summary>
+             Делегат для фиксации изменений статуса/параметров книг
+             </summary>
+             <param name="bookId"></param>
+             <param name="changemakerId"></param>
+             <param name="changeDate"></param>
+             <param name="type"></param>
+            <param name="comment"></param>
+             <returns></returns>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.ChangesPeriod">
+            <summary>Теги для получения изменений</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangesPeriod.latest">
+            <summary>последние</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangesPeriod.allTime">
+            <summary>за все время</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangesPeriod.concretePeriod">
+            <summary>конкретный период</summary>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.ChangeType">
+            <summary>Тип вносимых изменений по книге</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangeType.Reservation">
+            <summary>бронирование книги</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangeType.Returning">
+            <summary>возвращение в библиотеку</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangeType.Lost">
+            <summary>смена статуса книги на утеряна</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangeType.Other">
+            <summary>дургие изменения</summary>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.IChangeble">
+            <summary>Интейрейс отвечающий за регистрацию и показ изменений</summary>
+        </member>
+        <member name="E:LibraryAccounting.BL.Services.IChangeble.StatusChanged">
+            <inheritdoc></inheritdoc>
+            <summary>
+            Событие смены статуса книги
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IChangeble.GetChanges(System.Nullable{System.Guid},LibraryAccounting.BL.Services.ChangesPeriod,System.Tuple{System.DateTime,System.DateTime})">
+            <summary>
+            Получение изменений
+            </summary>
+            <param name="bookId">книга</param>
+            <param name="tagTime">Параметр получнеия списка</param>
+            /// <param name="period">запрашиваемый период, учитывается только при типе conretePeriod</param>
+            <returns></returns>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.ChangesManagerService">
+            <summary>Класс, релизующий интерфеск изменений</summary>
+        </member>
+        <member name="E:LibraryAccounting.BL.Services.ChangesManagerService.StatusChanged">
+            <summary>
+            Событие смены статуса книги
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.ChangesManagerService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper,LibraryAccounting.BL.Services.IReservable)">
+            <summary>Констурктор с DI</summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.ChangesManagerService.GetChanges(System.Nullable{System.Guid},LibraryAccounting.BL.Services.ChangesPeriod,System.Tuple{System.DateTime,System.DateTime})">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.ChangesManagerService.FixChanges(System.Guid,System.Guid,System.DateTime,LibraryAccounting.BL.Services.ChangeType,System.String)">
+            <summary>
+            Фиксация изменений
+            </summary>
+            <param name="bookId"></param>
+            <param name="changemakerId"></param>
+            <param name="changeTime"></param>
+            <param name="type"></param>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
         <member name="T:LibraryAccounting.BL.Services.IEmployeesStatable">
             <summary>
             Интерфейс работы с сотрудниками
             </summary>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.FixBookStatus">
+            <summary>
+            Делегат фиксации изменений статусов книг
+            </summary>
+            <param name="bookId"></param>
+            <param name="status"></param>
+            <returns></returns>
         </member>
         <member name="T:LibraryAccounting.BL.Services.ILibraryCurrentable">
             <summary>
@@ -154,29 +243,111 @@
             <summary>
             Получение списка имеющихся книг
             </summary>
-            <param name="currentPage">Текущая отображаемая страница</param>
-            <param name="pageSize"></param>
-            <param name="field"></param>
             <returns>Список книг</returns>
         </member>
         <member name="M:LibraryAccounting.BL.Services.ILibraryCurrentable.GetCount">
             <summary>
-            Получение длины массива книг
+            Получение количетсва книг в библиотеке
             </summary>
             <returns></returns>
         </member>
         <member name="T:LibraryAccounting.BL.Services.LibraryStateService">
             <summary>Сервис показа списка книг и работы с ним</summary>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper)">
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper,LibraryAccounting.BL.Services.IChangeble)">
             <summary>Конструктор со внедрением зависимости контекста базы данных </summary>
             <param name="context">Контекст базы данных</param>
             <param name="mapper">Карты для маппера</param>
+            <param name="changes">Измененеия</param>
+             <param name="reservations">Бронирование</param>
         </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetCount">
             <inheritdoc></inheritdoc>
         </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetBooks">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.ChangeBookStatus(System.Guid,System.String)">
+            <summary>
+            Смена статуса книги
+            </summary>
+            <param name="bookId"></param>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.IMailerSendable">
+            <summary>
+            Интерфейс сервиса рассылки писем
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IMailerSendable.Send(System.Guid,System.Guid)">
+            <summary>
+            Ассинхронная отправка почты
+            </summary>
+            <param name="employeeId"></param>
+            <param name="bookId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.MailingService">
+            <summary>
+            Сервис рассылки писем
+            </summary>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.ReservationsPeriod">
+            <summary>
+            Перечисление списка вовзращаемоых бронирований
+            </summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ReservationsPeriod.currently">
+            <summary>текущие</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ReservationsPeriod.allTime">
+            <summary>за все время</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ReservationsPeriod.concretePeriod">
+            <summary>конкретный период</summary>
+        </member>
+        <member name="T:LibraryAccounting.BL.Services.IReservable">
+            <summary>
+            Интерфес для получения и регитсрации бронирования
+            </summary>
+        </member>
+        <member name="E:LibraryAccounting.BL.Services.IReservable.BookChanged">
+            <summary>
+            Событие регитстрации
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IReservable.ReserveBook(System.Guid,System.Guid,System.DateTime,System.DateTime)">
+            <summary>
+            Резервация книги
+            </summary>
+            <param name="book">книга</param>
+            <param name="employee">работник</param>
+            <param name="reservationDate">дата брони</param>
+            <param name="returningDate">дата возвращения</param>
+            <returns></returns>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.IReservable.GetReservations(System.Nullable{System.Guid},LibraryAccounting.BL.Services.ReservationsPeriod,System.Tuple{System.DateTime,System.DateTime})">
+            <summary>
+            получить книги в использовании или за весь период
+            </summary>
+            <param name="bookId">книга</param>
+            <param name="tagTime">Параметр получнеия списка</param>
+            /// <param name="period">запрашиваемый период, учитывается только при типе conretePeriod</param>
+            <returns></returns>
+        </member>
+        <member name="E:LibraryAccounting.BL.Services.ReservationManagerService.BookChanged">
+            <summary>
+            Событие создаваемое при изменении статуса книги
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.ReservationManagerService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper)">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.ReservationManagerService.GetReservations(System.Nullable{System.Guid},LibraryAccounting.BL.Services.ReservationsPeriod,System.Tuple{System.DateTime,System.DateTime})">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.ReservationManagerService.ReserveBook(System.Guid,System.Guid,System.DateTime,System.DateTime)">
             <inheritdoc></inheritdoc>
         </member>
     </members>

@@ -49,6 +49,9 @@ namespace LibraryAccounting
             services.AddDbContext<BaseLibraryContext, LibraryDbContext>(); // Добавляем контекст бд
             services.AddScoped<IAuthenticable, AuthService>();
             services.AddScoped<ILibraryCurrentable, LibraryStateService>();
+            services.AddScoped<IReservable, ReservationManagerService>();
+            services.AddScoped<IChangeble, ChangesManagerService>();
+            services.AddScoped<IMailerSendable, MailingService>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {

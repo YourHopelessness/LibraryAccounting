@@ -35,7 +35,7 @@ namespace LibraryAccounting.DAL.Repositories
         /// <param name="properties">Массив параметров, по которым производиться выборка</param>
         /// <exception>Генерирует исключение EntityException, если параметр выборки указан неверно</exception>
         /// <returns>Вовзращает набор кортежей по условию поиска</returns>
-        public virtual IEnumerable<Entity> Get(Expression<Func<Entity, bool>> filter = null,
+        public virtual async Task<IEnumerable<Entity>> Get(Expression<Func<Entity, bool>> filter = null,
                                                Func<IQueryable<Entity>, IOrderedQueryable<Entity>> orderBy = null,
                                                string[] properties = null)
         {
@@ -62,11 +62,11 @@ namespace LibraryAccounting.DAL.Repositories
             }
             if (orderBy != null)
             {
-                return orderBy(query).ToList(); // сортировка по параметру
+                return await orderBy(query).ToListAsync(); // сортировка по параметру
             }
             else
             {
-                return query.ToList();
+                return await query.ToListAsync();
             }
         }
 
