@@ -51,7 +51,7 @@ namespace LibraryAccounting.BL.Services
         /// <returns></returns>
         public Task<List<BookInReservationsDto>> GetReservations(Guid? bookId = null,
                                                                  ReservationsPeriod tagTime = ReservationsPeriod.currently,
-                                                                 Tuple<DateTime, DateTime> period = nul);
+                                                                 Tuple<DateTime, DateTime> period = null);
     }
 
     public class ReservationManagerService : IReservable
