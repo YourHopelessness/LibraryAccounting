@@ -13,6 +13,9 @@
             книга
         </member>
         <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.ReaderId">
+            сотрудник, взявший книгу
+        </member>
+        <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.ReaderName">
             сотрудники, бравшие книгу
         </member>
         <member name="P:LibraryAccounting.BL.Dto.BookInReservationsDto.ReservationDate">

@@ -6,40 +6,53 @@
 @if (!HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
 {
     <h2>Вход</h2>
-    <div style="font-size:20px">
-        <span class="label label-danger">@Model.ErrMessage</span>
-    </div>
-    <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
-        <div class="validation" asp-validation-summary="ModelOnly"></div>
-        <div>
-            <div class="form-group">
-                <label asp-for="Auth.UserName">Введите регистрационное имя</label>
-                <input asp-for="Auth.UserName" />
-                <span asp-validation-for="Auth.UserName" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Auth.Password">Введите пароль</label>
-                <input asp-for="Auth.Password" />
-                <span asp-validation-for="Auth.Password" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Войти" class="btn btn-outline-dark" />
-            </div>
+    <div class="col-md-12">
+        <div style="font-size:20px" padding="4px">
+            <span class="label label-danger">@Model.ErrMessage</span>
         </div>
-    </form>
+    </div>
+    <div class="col-md-12" padding="4px">
+        <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Auth.UserName">Введите регистрационное имя</label>
+                    <input asp-for="Auth.UserName" />
+                    <span asp-validation-for="Auth.UserName" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Auth.Password">Введите пароль</label>
+                    <input asp-for="Auth.Password" />
+                    <span asp-validation-for="Auth.Password" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Войти" class="btn btn-outline-dark" />
+                </div>
+            </div>
+        </form>
+    </div>
 }
 
 @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
 {
     <h2>@ViewData["Title"]</h2>
     <div class="row">
-        <div class="col-md-12">
-            <h1>Hello @HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Name")?.Value!</h1>
-            <p>Username: @HttpContextAccessor.HttpContext.User.Identity.Name</p>
+        <div class="col-md-10">
+            <h4>Имя: @HttpContextAccessor.HttpContext.User.Identity.Name</h4>
+            <address>
+                <abbr title="Рабочая почта">sdsd</abbr>
+                <br>
+                <abbr title="Личная почта">asdasd</abbr>
+                <br>
+                <abbr title="Номер телефона">
+                    +7999999999
+                </abbr>
+            </address>
         </div>
-
-        <a asp-page-handler="Logout" asp-anti-forgery="true">
-            Выйти
-        </a>
+        <div class="col-md-2">
+            <a asp-page-handler="Logout" asp-anti-forgery="true">
+                Выйти
+            </a>
+        </div>
     </div>
 }

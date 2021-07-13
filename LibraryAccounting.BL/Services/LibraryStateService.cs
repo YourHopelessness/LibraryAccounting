@@ -48,13 +48,12 @@ namespace LibraryAccounting.BL.Services
         private Dictionary<string, string> bookStatuses = new Dictionary<string, string>{ 
             { "In library" , "В библиотеке" },
             { "Issued" , "Выдана"},
-            { "Losted", "Утреяна"}};
+            { "Losted", "Утеряна"}};
 
         /// <summary>Конструктор со внедрением зависимости контекста базы данных </summary>
         /// <param name="context">Контекст базы данных</param>
         /// <param name="mapper">Карты для маппера</param>
         /// <param name="changes">Измененеия</param>
-        ///  <param name="reservations">Бронирование</param>
         public LibraryStateService(BaseLibraryContext context, IMapper mapper, IChangeble changes)
         {
             _libraryUoW = new LibraryUOW(context);

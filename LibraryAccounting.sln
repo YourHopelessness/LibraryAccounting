@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAccounting.BL", "Lib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAccounting.Test", "LibraryAccounting.Test\LibraryAccounting.Test.csproj", "{7FC3C1EC-1DDA-45A9-97AF-533ECD40CA30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryAccounting.NotificationMailing", "LibraryAccounting.NotificationMailing\LibraryAccounting.NotificationMailing.csproj", "{C7588E76-7AA4-416C-9D64-253A26D6588C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAccounting.NotificationMailing", "LibraryAccounting.NotificationMailing\LibraryAccounting.NotificationMailing.csproj", "{C7588E76-7AA4-416C-9D64-253A26D6588C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

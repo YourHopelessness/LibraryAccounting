@@ -27,6 +27,6 @@ namespace LibraryAccounting.DAL.Entities
 
          /// <summary>Соль</summary>
         [Required]
-        public string Salt { get; set; }
+        public byte[] Salt { get; set; }
     }
 }

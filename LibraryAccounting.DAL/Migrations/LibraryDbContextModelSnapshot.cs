@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace LibraryAccounting.Migrations
+namespace LibraryAccounting.DAL.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
     partial class LibraryDbContextModelSnapshot : ModelSnapshot
@@ -112,20 +112,22 @@ namespace LibraryAccounting.Migrations
                         .HasColumnType("text")
                         .HasColumnName("username");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("text")
-                        .HasColumnName("password");
-
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uuid")
                         .HasColumnName("employee_id");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password");
+
                     b.Property<string>("Salt")
                         .IsRequired()
-                        .HasColumnType("salt")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("salt");
 
-                    b.HasKey("UserName", "Password", "EmployeeId");
+                    b.HasKey("UserName", "EmployeeId")
+                        .HasName("pk_auth");
 
                     b.HasIndex("EmployeeId");
 
@@ -186,7 +188,7 @@ namespace LibraryAccounting.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("reservation_date");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("return_date");
 
@@ -201,6 +203,8 @@ namespace LibraryAccounting.Migrations
                         .HasColumnName("returning_flag");
 
                     b.HasKey("ReaderId", "BookId", "ReservationDate", "ReturnDate");
+
+                    b.HasIndex("BookId");
 
                     b.ToTable("reservations");
                 });
@@ -274,6 +278,21 @@ namespace LibraryAccounting.Migrations
                     b.HasOne("LibraryAccounting.DAL.Entities.Employees", null)
                         .WithMany()
                         .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LibraryAccounting.DAL.Entities.Reservations", b =>
+                {
+                    b.HasOne("LibraryAccounting.DAL.Entities.Books", null)
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryAccounting.DAL.Entities.Employees", null)
+                        .WithMany()
+                        .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

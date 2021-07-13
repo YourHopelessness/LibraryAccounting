@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace LibraryAccounting.DAL.DB
 {
@@ -16,8 +17,7 @@ namespace LibraryAccounting.DAL.DB
             string connStr = null;
             try
             {
-                var appSettings = ConfigurationManager.AppSettings;
-                connStr = appSettings["ConnectionString:LibraryContext"];
+                connStr = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("ConnectionStrings")["LibraryContext"];
             }
             catch (ConfigurationErrorsException)
             {

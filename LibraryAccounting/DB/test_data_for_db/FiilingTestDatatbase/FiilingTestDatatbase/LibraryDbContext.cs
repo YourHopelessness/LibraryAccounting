@@ -23,7 +23,7 @@ namespace LibraryAccounting.DB
         {
             modelBuilder.Entity<DbLogin>(login =>
             {
-                login.HasKey(key => new { key.UserName, key.Password, key.EmployeeId });
+                login.HasKey(key => new { key.UserName, key.EmployeeId });
                 login.Property(e => e.EmployeeId)
                      .HasColumnName("employee_id");
                 login.HasOne<Emloyees>()
@@ -33,6 +33,8 @@ namespace LibraryAccounting.DB
                      .HasColumnName("username");
                 login.Property(pass => pass.Password)
                      .HasColumnName("password");
+                login.Property(salt => salt.Salt)
+                     .HasColumnName("salt");
             });
 
             modelBuilder.Entity<Emloyees>(employee =>

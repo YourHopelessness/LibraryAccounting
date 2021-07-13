@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.DAL.DB
 {
+    /// <summary>
+    /// класс, хранящий все взаимосвязи в базе
+    /// </summary>
     public class BaseLibraryContext : DbContext
     {
         /// <summary> Конструктор создания контекста с помощью внедрения зависимости</summary>
@@ -42,7 +45,8 @@ namespace LibraryAccounting.DAL.DB
         {
             modelBuilder.Entity<DbLogin>(login =>
             {
-                login.HasKey(key => new { key.UserName, key.Password, key.EmployeeId });
+                login.HasKey(key => new { key.UserName, key.EmployeeId })
+                     .HasName("pk_auth");
                 login.Property(e => e.EmployeeId)
                      .HasColumnName("employee_id");
                 login.HasOne<Employees>()
@@ -152,6 +156,12 @@ namespace LibraryAccounting.DAL.DB
                 reservation.Property(r => r.ReturningFlag)
                            .HasColumnName("returning_flag")
                            .HasDefaultValue(false);
+                reservation.HasOne<Books>()
+                           .WithMany()
+                           .HasForeignKey(r => r.BookId);
+                reservation.HasOne<Employees>()
+                           .WithMany()
+                           .HasForeignKey(e => e.ReaderId);
             });
 
             modelBuilder.Entity<Changes>(change =>

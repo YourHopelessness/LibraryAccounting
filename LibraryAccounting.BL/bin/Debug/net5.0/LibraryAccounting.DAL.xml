@@ -11,6 +11,11 @@
             <summary> Получеине строки подключения</summary>
             <returns>Возвращает строку подключения</returns>
         </member>
+        <member name="T:LibraryAccounting.DAL.DB.BaseLibraryContext">
+            <summary>
+            класс, хранящий все взаимосвязи в базе
+            </summary>
+        </member>
         <member name="M:LibraryAccounting.DAL.DB.BaseLibraryContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{LibraryAccounting.DAL.DB.LibraryDbContext})">
             <summary> Конструктор создания контекста с помощью внедрения зависимости</summary>
             <param name="options">Параметр для внедрения зависимости</param>
@@ -203,11 +208,6 @@
         <member name="M:LibraryAccounting.DAL.Repositories.LibraryUOW.Dispose">
             <summary>
             Уничтожение объектов
-            </summary>
-        </member>
-        <member name="T:LibraryAccounting.Migrations.init_db">
-            <summary>
-            Миграция
             </summary>
         </member>
     </members>

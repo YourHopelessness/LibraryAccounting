@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LibraryAccounting.BL.Dto;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using LibraryAccounting.BL.Services;
+using LibraryAccounting.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace LibraryAccounting.Pages
 {
@@ -19,9 +22,10 @@ namespace LibraryAccounting.Pages
     public class IndexModel : PageModel
     {
         /// <summary>Список отображаемых на станице книг</summary>
-        public IEnumerable<BookListModel> BooksList { get; set; }
+        public List<BookListModel> BooksList { get; set; }
 
         private readonly ILibraryCurrentable _library;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IReservable _reservations;
         private readonly IChangeble _changes;
         private readonly IMapper _config;
@@ -57,16 +61,34 @@ namespace LibraryAccounting.Pages
 
         ///<summary>Флаг возможности перехода на последнюю страницу</summary>
         public bool ShowLast => CurrentPage != TotalPages;
+
+        /// <summary>Поиск по isbn коду</summary>
+        [BindProperty(SupportsGet = true)]
+        public SearchModel Search { get; set; }
+
+        public SelectList Statuses { get; private set; }
+
+
         ///<inheritdoc></inheritdoc>
         public IndexModel(ILibraryCurrentable library,
                           IMapper mapper,
                           IChangeble changes,
-                          IReservable reservations)
+                          IReservable reservations,
+                          IHttpContextAccessor httpcontext)
         {
             _library = library;
             _config = mapper;
             _changes = changes;
             _reservations = reservations;
+            _httpContextAccessor = httpcontext;
+            if (httpcontext.HttpContext.User.IsInRole("admin"))
+            {
+                Statuses = new SelectList( new string[] { "В библиотеке", "Выдана", "Утеряна" });
+            }
+            else
+            {
+                Statuses = new SelectList(new string[] { "В библиотеке", "Выдана" });
+            }
         }
 
         /// <inheritdoc></inheritdoc>
@@ -75,22 +97,37 @@ namespace LibraryAccounting.Pages
             var books = await _library.GetBooks();
             var reservations = await _reservations.GetReservations();
             var changes = await _changes.GetChanges();
-            BooksList = _config.Map<IEnumerable<BookListModel>>(books);
+            BooksList = _config.Map<List<BookListModel>>(books);
+            reservations.ForEach(r => _config.Map(r, BooksList.Find(b => b.BookId == r.BookId)));
+            changes.ForEach(c => _config.Map(c, BooksList.Find(b => b.BookId == c.BookId)));
             Count = await _library.GetCount();
+
+            var list = BooksList.Select(b => b);
+
+            if (!string.IsNullOrEmpty(Search.SearchString))
+            {
+                list = list.Where(s => s.ISBN.Contains(Search.SearchString));
+            }
+
+            if (!string.IsNullOrEmpty(Search.Status))
+            {
+                list = list.Where(x => x.Status == Search.Status);
+            }
+            Search.ISBNList = new SelectList(BooksList.Select(b => b.ISBN).Distinct());
+            BooksList = list.ToList();
+        }
+    
+
+        public PartialViewResult OnGetTakeBookPartial()
+        {
+            TakeBookModel books = new TakeBookModel(BooksList);
+            return Partial("_TakeBookPartial", books);
         }
 
-        /// <summary> Пост запрос на добавление книги </summary>
-        public async Task<IActionResult> OnPostAddBookAsync()
+        public ActionResult TakeBook(Guid id)
         {
-            throw new System.Exception();
-            return RedirectToPage();
-        }
-
-        /// <summary> Пост запрос на бронирование книги </summary>
-        public async Task<IActionResult> OnPostTakeBookAsync()
-        {
-            throw new System.Exception();
-            return RedirectToPage();
+            TakeBookModel books = new TakeBookModel(BooksList);
+            return Partial("_TakeBookPartial", books);
         }
 
         /// <summary> Пост запрос на фильтрацию книг </summary>

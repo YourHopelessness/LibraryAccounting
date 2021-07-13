@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LibraryAccounting.BL.Dto;
 using AutoMapper;
 using LibraryAccounting.DAL.Entities;
+using LibraryAccounting.Models;
 
 namespace LibraryAccounting
 {
@@ -21,19 +22,32 @@ namespace LibraryAccounting
             CreateMap<Books, BooksDto>()
                 .ForMember(l => l.BookId, m => m.MapFrom(b => b.Id))
                 .ForMember(l => l.Status, m => m.MapFrom(b => b.StatusId.ToString()))
-                .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate.Date))
+                .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate))
                 .ReverseMap();
             CreateMap<BooksDto, BookListModel>()
                 .ReverseMap();
 
+            CreateMap<Changes, ChangesDto>()
+                    .ReverseMap();
             CreateMap<Employees, ChangesDto>()
                 .ForMember(dest => dest.ChangemakerFullName, m => m.MapFrom(src => src.FirstName + " " + src.LastName))
-                .ForAllOtherMembers(opt => opt.Ignore());
-                CreateMap<Changes, ChangesDto>()
-                    .ReverseMap();
-
-            CreateMap<Reservations, ReadersDto>()
                 .ReverseMap();
+            CreateMap<ChangesDto, BookListModel>()
+                .ForMember(dest => dest.ChangemakerFullName, m => m.MapFrom(src => src.ChangemakerFullName))
+                .ForMember(l => l.ChangeDate, m => m.MapFrom(b => b.ChangeDate.ToString("dd.MM.yyyy")))
+                .ForMember(l => l.Comment, m => m.MapFrom(b => b.Comment))
+                .ForAllOtherMembers(m => m.Ignore());
+
+            CreateMap<Reservations, BookInReservationsDto> ()
+                .ForMember(res => res.ReturningDate, m => m.MapFrom(r => r.ReturnDate));
+            CreateMap<Employees, BookInReservationsDto>()
+                .ForMember(dest => dest.ReaderName, m => m.MapFrom(src => src.FirstName + " " + src.LastName))
+                .ReverseMap();
+            CreateMap<BookInReservationsDto, BookListModel>()
+                .ForMember(dest => dest.ReaderName, m => m.MapFrom(src => src.ReaderName))
+                .ForMember(l => l.ReservationDate, m => m.MapFrom(b => b.ReservationDate.ToString("dd.MM.yyyy")))
+                .ForMember(l => l.ReturningDate, map => map.MapFrom(b => b.ReturningDate.GetValueOrDefault().ToString("dd.MM.yyyy")))
+                .ForAllOtherMembers(m => m.Ignore());
 
             CreateMap<Employees, ReadersDto>()
                 .ForMember(dest => dest.ReaderName, m => m.MapFrom(src => src.FirstName + " " + src.LastName))

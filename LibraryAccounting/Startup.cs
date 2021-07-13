@@ -59,9 +59,8 @@ namespace LibraryAccounting
                         options.AccessDeniedPath = new PathString("/Account/Login");
                     });
             services.AddAutoMapper(typeof(MapperConfigurateMap));
-            services.AddRazorPages(options =>
-           {
-           });
+            services.AddRouting();
+            services.AddRazorPages();
             services.AddMemoryCache();
         }
 

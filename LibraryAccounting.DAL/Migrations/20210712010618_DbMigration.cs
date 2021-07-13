@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace LibraryAccounting.Migrations
+namespace LibraryAccounting.DAL.Migrations
 {
-    public partial class init_db : Migration
+    public partial class DbMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,7 @@ namespace LibraryAccounting.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_books_statuses", x => x.id);
+                    table.PrimaryKey("PK_books_statuses", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,7 +35,7 @@ namespace LibraryAccounting.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_employees", x => x.id);
+                    table.PrimaryKey("PK_employees", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,7 +51,19 @@ namespace LibraryAccounting.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_reservations", x => new { x.reader_id, x.book_id, x.reservation_date, x.return_date });
+                    table.PrimaryKey("PK_reservations", x => new { x.reader_id, x.book_id, x.reservation_date, x.return_date });
+                    table.ForeignKey(
+                        name: "FK_reservations_books_book_id",
+                        column: x => x.book_id,
+                        principalTable: "books",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_reservations_employees_reader_id",
+                        column: x => x.reader_id,
+                        principalTable: "employees",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,7 +77,7 @@ namespace LibraryAccounting.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_roles", x => x.id);
+                    table.PrimaryKey("PK_roles", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,7 +85,7 @@ namespace LibraryAccounting.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    isbn = table.Column<string>(type: "text", nullable: true),
+                    isbn = table.Column<string>(type: "text", nullable: false),
                     title = table.Column<string>(type: "text", nullable: false),
                     author = table.Column<string>(type: "text", nullable: false),
                     published_by = table.Column<string>(type: "text", nullable: false),
@@ -82,10 +94,10 @@ namespace LibraryAccounting.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_books", x => x.id);
-                    table.UniqueConstraint("ak_books_isbn", x => x.isbn);
+                    table.PrimaryKey("PK_books", x => x.id);
+                    table.UniqueConstraint("AK_books_isbn", x => x.isbn);
                     table.ForeignKey(
-                        name: "fk_books_books_statuses_status_id",
+                        name: "FK_books_books_statuses_status_id",
                         column: x => x.status_id,
                         principalTable: "books_statuses",
                         principalColumn: "id",
@@ -98,13 +110,14 @@ namespace LibraryAccounting.Migrations
                 {
                     username = table.Column<string>(type: "text", nullable: false),
                     employee_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    password = table.Column<string>(type: "text", nullable: false)
+                    password = table.Column<string>(type: "text", nullable: false),
+                    salt = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_auth", x => new { x.username, x.password, x.employee_id });
+                    table.PrimaryKey("PK_auth", x => new { x.username, x.password, x.employee_id });
                     table.ForeignKey(
-                        name: "fk_auth_employees_employee_id",
+                        name: "FK_auth_employees_employee_id",
                         column: x => x.employee_id,
                         principalTable: "employees",
                         principalColumn: "id",
@@ -120,15 +133,15 @@ namespace LibraryAccounting.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user_roles", x => x.employee_id);
+                    table.PrimaryKey("PK_user_roles", x => x.employee_id);
                     table.ForeignKey(
-                        name: "fk_user_roles_employees_employee_id",
+                        name: "FK_user_roles_employees_employee_id",
                         column: x => x.employee_id,
                         principalTable: "employees",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_user_roles_roles_role_id",
+                        name: "FK_user_roles_roles_role_id",
                         column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "id",
@@ -146,15 +159,15 @@ namespace LibraryAccounting.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_changes", x => new { x.changemaker_id, x.book_id, x.change_date });
+                    table.PrimaryKey("PK_changes", x => new { x.changemaker_id, x.book_id, x.change_date });
                     table.ForeignKey(
-                        name: "fk_changes_books_book_id",
+                        name: "FK_changes_books_book_id",
                         column: x => x.book_id,
                         principalTable: "books",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_changes_employees_changemaker_id",
+                        name: "FK_changes_employees_changemaker_id",
                         column: x => x.changemaker_id,
                         principalTable: "employees",
                         principalColumn: "id",
@@ -188,11 +201,11 @@ namespace LibraryAccounting.Migrations
                 name: "auth");
 
             migrationBuilder.DropTable(
-                name: "Changes");
+                name: "changes");
 
             migrationBuilder.DropTable(
-                name: "Reservations");
-
+                name: "reservations");
+            
             migrationBuilder.DropTable(
                 name: "user_roles");
 
@@ -203,7 +216,7 @@ namespace LibraryAccounting.Migrations
                 name: "employees");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "roles");
 
             migrationBuilder.DropTable(
                 name: "books_statuses");

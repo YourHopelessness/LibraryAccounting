@@ -25,7 +25,17 @@ namespace FiilingTestDatatbase
                 LibraryAccounting.DB.test_data_for_db.TestFiller.FillChanges(dbContext);
                 Console.WriteLine("Changes table are filled...");
             }
-            
+
+
+            c = dbContext.Logins.CountAsync().GetAwaiter().GetResult();
+            int u = dbContext.Emloyees.CountAsync().GetAwaiter().GetResult();
+            if (u > c)
+            {
+                Console.WriteLine("Start filling auth table...");
+                LibraryAccounting.DB.test_data_for_db.TestFiller.FillUserLogins(dbContext);
+                Console.WriteLine("Auth table are filled...");
+            }
+            LibraryAccounting.DB.test_data_for_db.TestFiller.RestoreBooks(dbContext);
         }
     }
 }

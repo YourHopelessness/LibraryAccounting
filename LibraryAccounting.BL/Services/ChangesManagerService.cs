@@ -94,9 +94,22 @@ namespace LibraryAccounting.BL.Services
             {
                 case ChangesPeriod.latest:
                     changesBooks = _mapper.Map(_libraryUOW.Changes.Get().Result, changesBooks);
+                    changesBooks = changesBooks.OrderByDescending(c => c.ChangeDate)
+                                               .GroupBy(c => c.ChangemakerId)
+                                               .Select(c => c.Last()).ToList();
+                    changesBooks.ForEach(c => c.ChangemakerFullName = 
+                                    _mapper.Map(_libraryUOW.Employees.Get(filter: e => e.Id == 
+                                                                           c.ChangemakerId)
+                                                                      .Result.FirstOrDefault(), c)
+                                                .ChangemakerFullName);
                     break;
                 case ChangesPeriod.allTime:
                     changesBooks = _mapper.Map(_libraryUOW.Reservations.Get().Result, changesBooks);
+                    changesBooks.ForEach(c => c.ChangemakerFullName =
+                                    _mapper.Map(_libraryUOW.Employees.Get(filter: e => e.Id ==
+                                                                           c.ChangemakerId)
+                                                                      .Result.FirstOrDefault(), c)
+                                                .ChangemakerFullName);
                     break;
                 case ChangesPeriod.concretePeriod:
                     //TODO резервация за конкретный период

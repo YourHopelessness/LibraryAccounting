@@ -14,8 +14,11 @@ namespace LibraryAccounting.BL.Dto
         /// книга
         public Guid BookId { get; set; }
 
-        /// сотрудники, бравшие книгу
+        /// сотрудник, взявший книгу
         public Guid ReaderId { get; set; }
+
+        /// сотрудники, бравшие книгу
+        public string ReaderName { get; set; }
 
         /// дата выдачи
         public DateTime ReservationDate { get; set; }

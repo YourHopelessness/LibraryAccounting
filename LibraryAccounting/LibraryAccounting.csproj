@@ -33,8 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Admin\Stats.cshtml" />
-    <Content Remove="Pages\Admin\Users.cshtml" />
     <Content Remove="Pages\Admin\_ViewImports.cshtml" />
   </ItemGroup>
 
@@ -46,8 +44,6 @@
   
   
   <ItemGroup>
-    <None Include="Pages\Admin\Stats.cshtml" />
-    <None Include="Pages\Admin\Users.cshtml" />
     <None Include="Pages\Admin\_ViewImports.cshtml" />
     <None Include="Pages\Account\PersonalBiblio.cshtml" />
     <None Include="Pages\Error.cshtml" />
@@ -68,6 +64,82 @@
   
   <ItemGroup>
     <ProjectReference Include="..\LibraryAccounting.BL\LibraryAccounting.BL.csproj" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29 - Копировать %282%29 - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать (2) - Копировать (2).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29 - Копировать %282%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать (2).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29 - Копировать %283%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать (2).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29 - Копировать - Копировать %282%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать (2) - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29 - Копировать - Копировать - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать (2) - Копировать - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29 - Копировать - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать (2) - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29 - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать (2).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать %282%29.cshtml.cs">
+      <DependentUpon>Reports.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать %282%29 - Копировать %282%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать (2).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать %282%29 - Копировать - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать (2) - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать %282%29 - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать (2).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать %282%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать %283%29 - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать (3).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать %283%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать %284%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать - Копировать %282%29 - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать - Копировать (2).cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать - Копировать %282%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать - Копировать %283%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать - Копировать - Копировать %282%29.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать - Копировать - Копировать - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать - Копировать - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать - Копировать - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать - Копировать.cshtml.cs">
+      <DependentUpon>Reports - Копировать.cshtml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Admin\Reports - Копировать.cshtml.cs">
+      <DependentUpon>Reports.cshtml.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

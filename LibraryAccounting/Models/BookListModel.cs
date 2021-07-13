@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace LibraryAccounting.BL.Dto
+namespace LibraryAccounting.Models
 {
     /// <summary>
     /// Модель для отображения списка книг
@@ -35,17 +35,23 @@ namespace LibraryAccounting.BL.Dto
         [DisplayName("Текущий статус")]
         public string Status { get; set; }
 
+        /// Id читателя
+        public Guid? ReaderId { get; set; }
+
         /// имя читателя
         [DisplayName("Текущий читатель")]
         public string ReaderName { get; set; }
 
         /// дата выдачи
         [DisplayName("Дата выдачи")]
-        public DateTime? ReservationDate { get; set; }
+        public string ReservationDate { get; set; }
 
         ///дата сдачи
         [DisplayName("Планируемая дата сдачи")]
-        public DateTime? ReturningDate { get; set; }
+        public string ReturningDate { get; set; }
+
+        /// Id читателя
+        public Guid? ChangemakerId { get; set; }
 
         /// автор изменений
         [DisplayName("Автор изменений")]
@@ -53,7 +59,7 @@ namespace LibraryAccounting.BL.Dto
 
         /// дата измений
         [DisplayName("Дата последнего изменения")]
-        public DateTime? ChangeDate { get; set; }
+        public string ChangeDate { get; set; }
 
         /// комментарий
         [DisplayName("Комментарий")]

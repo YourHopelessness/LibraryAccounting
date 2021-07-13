@@ -51,7 +51,7 @@ namespace LibraryAccounting.BL.Services
         /// <returns></returns>
         public Task<List<BookInReservationsDto>> GetReservations(Guid? bookId = null,
                                                                  ReservationsPeriod tagTime = ReservationsPeriod.currently,
-                                                                 Tuple<DateTime, DateTime> period = nul);
+                                                                 Tuple<DateTime, DateTime> period = null);
     }
 
     public class ReservationManagerService : IReservable
@@ -79,10 +79,16 @@ namespace LibraryAccounting.BL.Services
             switch(tagTime)
             {
                 case ReservationsPeriod.currently:
-                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => b.ReturnDate < DateTime.Now && b.ReturnDate != null).Result, resevedBooks);
+                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => b.ReturnDate > DateTime.Now && b.ReturningFlag == false).Result, resevedBooks);
+                    resevedBooks.ForEach(r =>
+                                r.ReaderName = _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().FirstName + " " +
+                                               _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().LastName);
                     break;
                 case ReservationsPeriod.allTime:
                     resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get().Result, resevedBooks);
+                    resevedBooks.ForEach(r =>
+                                r.ReaderName = _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().FirstName + " " +
+                                               _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().LastName);
                     break;
                 case ReservationsPeriod.concretePeriod:
                     //TODO резервация за конкретный период

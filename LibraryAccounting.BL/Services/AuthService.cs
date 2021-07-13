@@ -13,6 +13,7 @@ using LibraryAccounting.DAL.DB;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Linq.Expressions;
 using LibraryAccounting.DAL.Entities;
+using System.Security.Cryptography;
 
 namespace LibraryAccounting.BL.Services
 {
@@ -43,6 +44,7 @@ namespace LibraryAccounting.BL.Services
         private readonly LibraryUOW _libraryUOW;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
+        private byte[] globalSalt = Encoding.ASCII.GetBytes("Dear Math, grow up and solve your own problems");
 
         public AuthService(BaseLibraryContext libraryContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
@@ -54,14 +56,21 @@ namespace LibraryAccounting.BL.Services
         public async Task<EmployeeLoginDto> EmployeeLoginInfo(string username, string password)
         {
             EmployeeLoginDto employee = null;
-            var logins = _libraryUOW.Logins.Get(filter: l => l.Password == password && l.UserName == username);
-            if (logins.Result.ToList().Count != 0)
+            var logins = await _libraryUOW.Logins.Get(filter: l => l.UserName == username);
+            if (logins.Count() != 0)
             {
-                employee = _mapper.Map<EmployeeLoginDto>(logins.Result.FirstOrDefault());
-                int? roleId = _libraryUOW.UserRoles.Get(filter: e => e.EmployeeId == employee.EmployeeId).Result.FirstOrDefault().RoleId;
-                employee.Role = _libraryUOW.Roles.Get(filter: r => r.Id == roleId).Result.FirstOrDefault().Name;
-                var empl = _libraryUOW.Employees.Get(filter: e => e.Id == employee.EmployeeId).Result.FirstOrDefault();
-                employee.EmployeeName = empl.FirstName + " " + empl.LastName;
+                var globalCrypt = new HMACSHA512(globalSalt);
+                var decPass = globalCrypt.ComputeHash(Encoding.ASCII.GetBytes(password));
+                var personalCrypt = new HMACSHA512(logins.First().Salt);
+                var Pass = Convert.ToBase64String(personalCrypt.ComputeHash(decPass));
+                if (logins.First().Password == Pass)
+                {
+                    employee = _mapper.Map<EmployeeLoginDto>(logins.FirstOrDefault());
+                    int? roleId = (await _libraryUOW.UserRoles.Get(filter: e => e.EmployeeId == employee.EmployeeId)).FirstOrDefault().RoleId;
+                    employee.Role = (await _libraryUOW.Roles.Get(filter: r => r.Id == roleId)).FirstOrDefault().Name;
+                    var empl = (await _libraryUOW.Employees.Get(filter: e => e.Id == employee.EmployeeId)).FirstOrDefault();
+                    employee.EmployeeName = empl.FirstName + " " + empl.LastName;
+                }
             }
             return employee;
         }
