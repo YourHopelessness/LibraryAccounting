@@ -11,7 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using LibraryAccounting.BL.Services;
 using LibraryAccounting.Models;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 
 namespace LibraryAccounting.Pages
 {
@@ -25,24 +28,19 @@ namespace LibraryAccounting.Pages
         public List<BookListModel> BooksList { get; set; }
 
         private readonly ILibraryCurrentable _library;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IReservable _reservations;
         private readonly IChangeble _changes;
         private readonly IMapper _config;
+        private SortingModel<BookListModel> _sorting;
 
+
+        ///<summary>Количетсво книг</summary>
+        public int Count { get; set; }
+
+        #region pagination
         ///<summary>Текущая страница</summary>
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; }
-
-        ///<summary>Поле сортировки</summary>
-        [BindProperty(SupportsGet = true)]
-        public string OrderBy { get; set; }
-
-        ///<summary>Поле сортировки</summary>
-        [BindProperty(SupportsGet = true)]
-        public string SortBy { get; set; }
-        ///<summary>Количетсво книг</summary>
-        public int Count { get; set; }
 
         ///<summary>Размер одной страницы</summary>
         public int PageSize { get; set; } = 10;
@@ -61,34 +59,33 @@ namespace LibraryAccounting.Pages
 
         ///<summary>Флаг возможности перехода на последнюю страницу</summary>
         public bool ShowLast => CurrentPage != TotalPages;
+        #endregion
+
+        #region sorting
+        ///<summary>Поле сортировки</summary>
+        [BindProperty(SupportsGet = true)]
+        public string SortBy { get; set; }
+
+        public string OrderBy { get; set; }
 
         /// <summary>Поиск по isbn коду</summary>
         [BindProperty(SupportsGet = true)]
         public SearchModel Search { get; set; }
-
-        public SelectList Statuses { get; private set; }
+        #endregion
 
 
         ///<inheritdoc></inheritdoc>
         public IndexModel(ILibraryCurrentable library,
                           IMapper mapper,
                           IChangeble changes,
-                          IReservable reservations,
-                          IHttpContextAccessor httpcontext)
+                          IReservable reservations)
         {
             _library = library;
             _config = mapper;
             _changes = changes;
             _reservations = reservations;
-            _httpContextAccessor = httpcontext;
-            if (httpcontext.HttpContext.User.IsInRole("admin"))
-            {
-                Statuses = new SelectList( new string[] { "В библиотеке", "Выдана", "Утеряна" });
-            }
-            else
-            {
-                Statuses = new SelectList(new string[] { "В библиотеке", "Выдана" });
-            }
+            _sorting = new SortingModel<BookListModel>();
+            
         }
 
         /// <inheritdoc></inheritdoc>
@@ -102,39 +99,55 @@ namespace LibraryAccounting.Pages
             changes.ForEach(c => _config.Map(c, BooksList.Find(b => b.BookId == c.BookId)));
             Count = await _library.GetCount();
 
+            #region searching
+            Search.Statuses = new SelectList(_library.GetStatuses().Result.Values);
             var list = BooksList.Select(b => b);
-
             if (!string.IsNullOrEmpty(Search.SearchString))
             {
                 list = list.Where(s => s.ISBN.Contains(Search.SearchString));
             }
-
             if (!string.IsNullOrEmpty(Search.Status))
             {
                 list = list.Where(x => x.Status == Search.Status);
             }
             Search.ISBNList = new SelectList(BooksList.Select(b => b.ISBN).Distinct());
-            BooksList = list.ToList();
-        }
-    
+            #endregion
 
-        public PartialViewResult OnGetTakeBookPartial()
-        {
-            TakeBookModel books = new TakeBookModel(BooksList);
-            return Partial("_TakeBookPartial", books);
+            #region sorting
+
+           /* var properties = new SortingModel<BookListModel>().SortedField;
+            foreach (var f in _sorting.SortedField)
+            {
+                try
+                {
+                   ViewData[f] = (string)ViewData[f] == f || ViewData[f] == null ? f : (string)ViewData[f];
+                }
+                catch
+                {
+                    ViewData.Add(f, f);
+                }
+            }
+            ViewData[SortBy] =  !properties.Contains(ViewData[SortBy]) ? 
+                                (ViewData[SortBy] as string).SkipLast(5).ToString() : 
+                                ViewData[SortBy] + " DESC";*/
+             
+           
+           /* if (_sorting.Ascending)
+            {
+                list = list.AsQueryable().OrderBy(_sorting.SortedField + " ASC");
+            }
+            else
+            {*/
+                list = list.AsQueryable().OrderBy(SortBy + OrderBy);
+            //}
+            BooksList = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            #endregion
         }
 
         public ActionResult TakeBook(Guid id)
         {
             TakeBookModel books = new TakeBookModel(BooksList);
             return Partial("_TakeBookPartial", books);
-        }
-
-        /// <summary> Пост запрос на фильтрацию книг </summary>
-        public async Task<IActionResult> OnPostFilterByAsync()
-        {
-            throw new System.Exception();
-            return RedirectToPage();
         }
     }
 

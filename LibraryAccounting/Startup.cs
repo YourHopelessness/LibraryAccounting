@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+п»їusing Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using LibraryAccounting.DAL.DB;
@@ -21,12 +21,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 namespace LibraryAccounting
 {
     /// <summary>
-    /// Основной класс приложения
+    /// РћСЃРЅРѕРІРЅРѕР№ РєР»Р°СЃСЃ РїСЂРёР»РѕР¶РµРЅРёСЏ
     /// </summary>
     public class Startup
     {
         /// <summary>
-        /// Точка запуска приложения
+        /// РўРѕС‡РєР° Р·Р°РїСѓСЃРєР° РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
@@ -34,19 +34,19 @@ namespace LibraryAccounting
             Configuration = configuration;
         }
         /// <summary>
-        /// Свойство конфигурации
+        /// РЎРІРѕР№СЃС‚РІРѕ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
         /// </summary>
         public IConfiguration Configuration { get; }
 
         /// <summary>
-        /// Конфигурация сервисов
+        /// РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЃРµСЂРІРёСЃРѕРІ
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddServerSideBlazor();
             services.AddHttpContextAccessor();
-            services.AddDbContext<BaseLibraryContext, LibraryDbContext>(); // Добавляем контекст бд
+            services.AddDbContext<BaseLibraryContext, LibraryDbContext>(); // Р”РѕР±Р°РІР»СЏРµРј РєРѕРЅС‚РµРєСЃС‚ Р±Рґ
             services.AddScoped<IAuthenticable, AuthService>();
             services.AddScoped<ILibraryCurrentable, LibraryStateService>();
             services.AddScoped<IReservable, ReservationManagerService>();
@@ -65,7 +65,7 @@ namespace LibraryAccounting
         }
 
         /// <summary>
-        /// Конфигруация приложения
+        /// РљРѕРЅС„РёРіСЂСѓР°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
@@ -91,7 +91,7 @@ namespace LibraryAccounting
             app.UseCookiePolicy(cookiePolicyOptions);
             app.UseRouting();
 
-            app.UseAuthentication();    // аутентификация
+            app.UseAuthentication();    // Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

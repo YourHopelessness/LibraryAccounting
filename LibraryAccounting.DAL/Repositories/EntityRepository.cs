@@ -77,8 +77,6 @@ namespace LibraryAccounting.DAL.Repositories
         public virtual void Insert(Entity entity)
         {
             _entitySet.Add(entity);
-
-            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -92,8 +90,6 @@ namespace LibraryAccounting.DAL.Repositories
                 _entitySet.Attach(entityToDelete);
             }
             _entitySet.Remove(entityToDelete);
-
-            _dbContext.SaveChanges();
         }
         /// <summary>
         /// CRUD операция обновления
@@ -103,7 +99,6 @@ namespace LibraryAccounting.DAL.Repositories
         {
             _entitySet.Attach(entityToUpdate);
             _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-            _dbContext.SaveChanges();
         }
     }
 }

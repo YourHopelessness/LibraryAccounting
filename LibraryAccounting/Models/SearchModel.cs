@@ -11,5 +11,6 @@ namespace LibraryAccounting.Models
         public string SearchString { get; set; }
         public SelectList ISBNList { get; set; }
         public string Status { get; set; }
+        public SelectList Statuses { get; set; }
     }
 }

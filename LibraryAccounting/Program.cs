@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
+п»їusing Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 namespace LibraryAccounting
 {
     /// <summary>
-    /// Точка вххода в приложение
+    /// РўРѕС‡РєР° РІС…С…РѕРґР° РІ РїСЂРёР»РѕР¶РµРЅРёРµ
     /// </summary>
     public class Program
     {
         /// <summary>
-        /// ТОчка запуска приложения
+        /// РўРћС‡РєР° Р·Р°РїСѓСЃРєР° РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
@@ -27,7 +27,7 @@ namespace LibraryAccounting
         }
 
         /// <summary>
-        /// Создание хоста
+        /// РЎРѕР·РґР°РЅРёРµ С…РѕСЃС‚Р°
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>

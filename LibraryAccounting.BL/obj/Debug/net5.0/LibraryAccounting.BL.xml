@@ -254,17 +254,26 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:LibraryAccounting.BL.Services.ILibraryCurrentable.GetStatuses">
+            <summary>
+            Получение статусов книг
+            </summary>
+            <returns>Список статусов книг</returns>
+        </member>
         <member name="T:LibraryAccounting.BL.Services.LibraryStateService">
             <summary>Сервис показа списка книг и работы с ним</summary>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper,LibraryAccounting.BL.Services.IChangeble)">
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper,LibraryAccounting.BL.Services.IChangeble,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>Конструктор со внедрением зависимости контекста базы данных </summary>
             <param name="context">Контекст базы данных</param>
             <param name="mapper">Карты для маппера</param>
             <param name="changes">Измененеия</param>
-             <param name="reservations">Бронирование</param>
+            <param name="httpAccessor">Измененеия</param>
         </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetCount">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetStatuses">
             <inheritdoc></inheritdoc>
         </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetBooks">

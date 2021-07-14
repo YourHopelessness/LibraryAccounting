@@ -3,7 +3,7 @@
 LibraryAccounting/bin/
 LibraryAccounting/obj/
 LibraryAccounting.DAL/bin/
-LibraryAccounting.DAL/obj/
+LibraryAccounting.DAL/obj/*
 LibraryAccounting.BL/bin/
-LibraryAccounting.BL/obj/
+LibraryAccounting.BL/obj/*
 README.md
