@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace LibraryAccounting.BL.Services
 {
@@ -30,6 +31,10 @@ namespace LibraryAccounting.BL.Services
     public interface ILibraryCurrentable
     {
         /// <summary>
+        /// Событие, происходящее при добавлении книги
+        /// </summary>
+        public event FixChanges BookAdded;
+        /// <summary>
         /// Получение списка имеющихся книг
         /// </summary>
         /// <returns>Список книг</returns>
@@ -44,6 +49,18 @@ namespace LibraryAccounting.BL.Services
         /// </summary>
         /// <returns>Список статусов книг</returns>
         public Task<Dictionary<string, string>> GetStatuses();
+        /// <summary>
+        /// Добавление книги
+        /// </summary>
+        /// <param name="book">книга</param>
+        /// <returns></returns>
+        public Task AddBook(BooksDto book);
+        /// <summary>
+        /// Получение текущего состояния книги по идентификатору
+        /// </summary>
+        /// <param name="id">идентификатор книги</param>
+        /// <returns></returns>
+        public Task<BooksDto> GetBookById(Guid id);
     }
 
     /// <summary>Сервис показа списка книг и работы с ним</summary>
@@ -52,6 +69,9 @@ namespace LibraryAccounting.BL.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpAccessor;
         private readonly LibraryUOW _libraryUoW;
+
+        /// <inheritdoc></inheritdoc>
+        public event FixChanges BookAdded;
 
         /// <summary>Конструктор со внедрением зависимости контекста базы данных </summary>
         /// <param name="context">Контекст базы данных</param>
@@ -64,10 +84,17 @@ namespace LibraryAccounting.BL.Services
             _mapper = mapper;
             _httpAccessor = httpAccessor;
             changes.StatusChanged += ChangeBookStatus; // будут ли они обрабатываться ?
+            BookAdded += changes.FixChanges;
         }
 
         /// <inheritdoc></inheritdoc>
         public async Task<int> GetCount() => await Task.Run(() => GetBooks().Result.Count); // Количество книг
+
+        /// <inheritdoc></inheritdoc>
+        public async Task<BooksDto> GetBookById(Guid id)
+        {
+            return _mapper.Map<BooksDto>((await _libraryUoW.Books.Get(filter: b => b.Id == id)).FirstOrDefault());
+        }
 
         /// <inheritdoc></inheritdoc>
         public async Task<Dictionary<string, string>> GetStatuses()
@@ -100,6 +127,17 @@ namespace LibraryAccounting.BL.Services
                                 GetStatuses().Result[_libraryUoW.BooksStatuses.Get(filter: e => e.Id == 
                                            Convert.ToInt32(l.Status)).Result.FirstOrDefault().Status]));
             return library;
+        }
+
+        /// <inheritdoc></inheritdoc>
+        public async Task AddBook(BooksDto book)
+        {
+            Books nBook = _mapper.Map<Books>(book);
+            nBook.StatusId = 2;
+            await Task.Run(() => _libraryUoW.Books.Insert(nBook));
+            await _libraryUoW.Save();
+            Guid changemakerId = Guid.Parse(_httpAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value);
+            await BookAdded(book.BookId, changemakerId, DateTime.Now, ChangeType.Added);
         }
 
         /// <summary>

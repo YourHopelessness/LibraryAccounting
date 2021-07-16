@@ -1,0 +1,28 @@
+﻿@page
+@model LibraryAccounting.Pages.Account.AboutMeModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{ ViewData["Title"] = "Личный кабинет"; }
+
+@if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+{
+    <h2>@ViewData["Title"]</h2>
+    <div class="row">
+        <div class="col-md-10">
+            <h4>Имя: @HttpContextAccessor.HttpContext.User.Identity.Name</h4>
+            <address>
+                <abbr title="Рабочая почта">sdsd</abbr>
+                <br>
+                <abbr title="Личная почта">asdasd</abbr>
+                <br>
+                <abbr title="Номер телефона">
+                    +7999999999
+                </abbr>
+            </address>
+        </div>
+        <div class="col-md-2">
+            <a asp-page-handler="Logout" asp-anti-forgery="true">
+                Выйти
+            </a>
+        </div>
+    </div>
+}

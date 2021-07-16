@@ -31,7 +31,6 @@ namespace LibraryAccounting.Pages
         private readonly IReservable _reservations;
         private readonly IChangeble _changes;
         private readonly IMapper _config;
-        private SortingModel<BookListModel> _sorting;
 
 
         ///<summary>Количетсво книг</summary>
@@ -67,12 +66,10 @@ namespace LibraryAccounting.Pages
         public string SortBy { get; set; }
 
         public string OrderBy { get; set; }
-
+        #endregion
         /// <summary>Поиск по isbn коду</summary>
         [BindProperty(SupportsGet = true)]
         public SearchModel Search { get; set; }
-        #endregion
-
 
         ///<inheritdoc></inheritdoc>
         public IndexModel(ILibraryCurrentable library,
@@ -84,13 +81,13 @@ namespace LibraryAccounting.Pages
             _config = mapper;
             _changes = changes;
             _reservations = reservations;
-            _sorting = new SortingModel<BookListModel>();
             
         }
 
         /// <inheritdoc></inheritdoc>
         public async Task OnGetAsync()
         {
+            var f = Request.Headers["Referer"].ToString();
             var books = await _library.GetBooks();
             var reservations = await _reservations.GetReservations();
             var changes = await _changes.GetChanges();
@@ -115,39 +112,9 @@ namespace LibraryAccounting.Pages
 
             #region sorting
 
-           /* var properties = new SortingModel<BookListModel>().SortedField;
-            foreach (var f in _sorting.SortedField)
-            {
-                try
-                {
-                   ViewData[f] = (string)ViewData[f] == f || ViewData[f] == null ? f : (string)ViewData[f];
-                }
-                catch
-                {
-                    ViewData.Add(f, f);
-                }
-            }
-            ViewData[SortBy] =  !properties.Contains(ViewData[SortBy]) ? 
-                                (ViewData[SortBy] as string).SkipLast(5).ToString() : 
-                                ViewData[SortBy] + " DESC";*/
-             
-           
-           /* if (_sorting.Ascending)
-            {
-                list = list.AsQueryable().OrderBy(_sorting.SortedField + " ASC");
-            }
-            else
-            {*/
-                list = list.AsQueryable().OrderBy(SortBy + OrderBy);
-            //}
+            list = list.AsQueryable().OrderBy(SortBy + OrderBy);
             BooksList = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             #endregion
-        }
-
-        public ActionResult TakeBook(Guid id)
-        {
-            TakeBookModel books = new TakeBookModel(BooksList);
-            return Partial("_TakeBookPartial", books);
         }
     }
 

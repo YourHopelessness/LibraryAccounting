@@ -34,7 +34,7 @@ namespace LibraryAccounting.BL.Services
         /// <param name="employeeName"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        public Task Autentificate(string username, string employeeName, string role);
+        public Task Autentificate(string username, string employeeName, string role, string id);
     }
     /// <summary>
     /// Сервис аутентификации
@@ -75,12 +75,13 @@ namespace LibraryAccounting.BL.Services
             return employee;
         }
         /// <inheritdoc></inheritdoc>
-        public async Task Autentificate(string username, string employeeName, string role)
+        public async Task Autentificate(string username, string employeeName, string role, string id)
         {
             // создаем один claim
             var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.NameIdentifier, id),
                     new Claim("Name", employeeName),
                     new Claim(ClaimTypes.Role, role),
                 };

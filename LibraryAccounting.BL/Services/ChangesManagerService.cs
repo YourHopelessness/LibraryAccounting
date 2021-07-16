@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LibraryAccounting.BL.Dto;
 using LibraryAccounting.DAL.DB;
+using LibraryAccounting.DAL.Entities;
 using LibraryAccounting.DAL.Repositories;
 
 namespace LibraryAccounting.BL.Services
@@ -35,6 +36,8 @@ namespace LibraryAccounting.BL.Services
     /// <summary>Тип вносимых изменений по книге</summary>
     public enum ChangeType
     {
+        /// <summary>добавление книги</summary>
+        Added,
         /// <summary>бронирование книги</summary>
         Reservation,
         /// <summary>возвращение в библиотеку</summary>
@@ -63,6 +66,17 @@ namespace LibraryAccounting.BL.Services
         public Task<List<ChangesDto>> GetChanges(Guid? bookId = null,
                                                  ChangesPeriod tagTime = ChangesPeriod.latest,
                                                  Tuple<DateTime, DateTime> period = null);
+
+        /// <summary>
+        /// Фиксация изменений
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <param name="changemakerId"></param>
+        /// <param name="changeTime"></param>
+        /// <param name="type"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        public Task FixChanges(Guid bookId, Guid changemakerId, DateTime changeTime, ChangeType type, string comment = null);
     }
 
     /// <summary>Класс, релизующий интерфеск изменений</summary>
@@ -73,6 +87,11 @@ namespace LibraryAccounting.BL.Services
         /// </summary>
         public event FixBookStatus StatusChanged;
 
+        private readonly string[] commentChanges = 
+            { $"{0} была добавлена книга {1} сотрудником {2}",
+              $"{0} была забронирована книга {1} сотрудником {2}. Статус книги изменен на выдана",
+              $"{0} принята книга {1} сотрудником {2}. Статус книги изменен на в бибилотеке",
+              $"{0} был изменен статус книги {1} на утреряна сотрудником {2}"};
         private readonly LibraryUOW _libraryUOW;
         private readonly IMapper _mapper;
 
@@ -120,18 +139,22 @@ namespace LibraryAccounting.BL.Services
             return Task.FromResult(changesBooks);
         }
 
-        /// <summary>
-        /// Фиксация изменений
-        /// </summary>
-        /// <param name="bookId"></param>
-        /// <param name="changemakerId"></param>
-        /// <param name="changeTime"></param>
-        /// <param name="type"></param>
-        /// <param name="comment"></param>
-        /// <returns></returns>
-        private async Task FixChanges(Guid bookId, Guid changemakerId, DateTime changeTime, ChangeType type, string comment = null)
+        /// <inheritdoc></inheritdoc>
+        public async Task FixChanges(Guid bookId, Guid changemakerId, DateTime changeTime, ChangeType type, string comment = null)
         {
-
+            if (type == ChangeType.Reservation || type == ChangeType.Returning)
+                await StatusChanged.Invoke(bookId, type.ToString());
+            Changes nChange = new();
+            nChange.BookId = bookId;
+            nChange.ChangemakerId = changemakerId;
+            nChange.ChangeDate = changeTime;
+            if (type == ChangeType.Other) nChange.Comment = comment;
+            else nChange.Comment = String.Format(commentChanges[(int)type],
+                changeTime,
+                _libraryUOW.Books.Get(filter: b => b.Id == bookId),
+                _libraryUOW.Employees.Get(filter: e => e.Id == changemakerId));
+             _libraryUOW.Changes.Insert(nChange);
+            await _libraryUOW.Save();
         }
     }
 }

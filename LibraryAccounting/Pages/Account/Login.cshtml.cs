@@ -66,7 +66,7 @@ namespace LibraryAccounting.Pages.Account
             EmployeeLoginDto employee = await _auth.EmployeeLoginInfo(Auth.UserName, Auth.Password); 
             if (employee != null)
             {
-                await _auth.Autentificate(employee.EmployeeUsername, employee.EmployeeName, employee.Role); // аутентификация
+                await _auth.Autentificate(employee.EmployeeUsername, employee.EmployeeName, employee.Role, Convert.ToString(employee.EmployeeId)); // аутентификация
                 return RedirectToPage();
             }
             else

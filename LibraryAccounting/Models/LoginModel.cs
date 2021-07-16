@@ -8,7 +8,7 @@ namespace LibraryAccounting.Models
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "Поле Email не может быть путсым")]
+        [Required(ErrorMessage = "Имя пользователя не может быть путсым")]
         [DataType(DataType.Text)]
         public string UserName { get; set; }
 

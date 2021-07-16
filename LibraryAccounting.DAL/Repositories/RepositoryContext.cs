@@ -57,9 +57,9 @@ namespace LibraryAccounting.DAL.Repositories
         public EntityRepository<Roles> Roles { get => roles ??= new EntityRepository<Roles>(_db); }
 
         /// <summary>Сохрание в базу данных</summary>
-        public void Save()
+        public async Task Save()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>

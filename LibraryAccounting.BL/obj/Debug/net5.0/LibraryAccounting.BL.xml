@@ -123,7 +123,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.IAuthenticable.Autentificate(System.String,System.String,System.String)">
+        <member name="M:LibraryAccounting.BL.Services.IAuthenticable.Autentificate(System.String,System.String,System.String,System.String)">
             <summary>
             Метод аутентификации пользователя
             </summary>
@@ -140,7 +140,7 @@
         <member name="M:LibraryAccounting.BL.Services.AuthService.EmployeeLoginInfo(System.String,System.String)">
             <inheritdoc></inheritdoc>
         </member>
-        <member name="M:LibraryAccounting.BL.Services.AuthService.Autentificate(System.String,System.String,System.String)">
+        <member name="M:LibraryAccounting.BL.Services.AuthService.Autentificate(System.String,System.String,System.String,System.String)">
             <inheritdoc></inheritdoc>
         </member>
         <member name="T:LibraryAccounting.BL.Services.FixChanges">
@@ -168,6 +168,9 @@
         </member>
         <member name="T:LibraryAccounting.BL.Services.ChangeType">
             <summary>Тип вносимых изменений по книге</summary>
+        </member>
+        <member name="F:LibraryAccounting.BL.Services.ChangeType.Added">
+            <summary>добавление книги</summary>
         </member>
         <member name="F:LibraryAccounting.BL.Services.ChangeType.Reservation">
             <summary>бронирование книги</summary>
@@ -199,6 +202,17 @@
             /// <param name="period">запрашиваемый период, учитывается только при типе conretePeriod</param>
             <returns></returns>
         </member>
+        <member name="M:LibraryAccounting.BL.Services.IChangeble.FixChanges(System.Guid,System.Guid,System.DateTime,LibraryAccounting.BL.Services.ChangeType,System.String)">
+            <summary>
+            Фиксация изменений
+            </summary>
+            <param name="bookId"></param>
+            <param name="changemakerId"></param>
+            <param name="changeTime"></param>
+            <param name="type"></param>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
         <member name="T:LibraryAccounting.BL.Services.ChangesManagerService">
             <summary>Класс, релизующий интерфеск изменений</summary>
         </member>
@@ -214,15 +228,7 @@
             <inheritdoc></inheritdoc>
         </member>
         <member name="M:LibraryAccounting.BL.Services.ChangesManagerService.FixChanges(System.Guid,System.Guid,System.DateTime,LibraryAccounting.BL.Services.ChangeType,System.String)">
-            <summary>
-            Фиксация изменений
-            </summary>
-            <param name="bookId"></param>
-            <param name="changemakerId"></param>
-            <param name="changeTime"></param>
-            <param name="type"></param>
-            <param name="comment"></param>
-            <returns></returns>
+            <inheritdoc></inheritdoc>
         </member>
         <member name="T:LibraryAccounting.BL.Services.IEmployeesStatable">
             <summary>
@@ -240,6 +246,11 @@
         <member name="T:LibraryAccounting.BL.Services.ILibraryCurrentable">
             <summary>
             Интерфейс для сервиса показа книг
+            </summary>
+        </member>
+        <member name="E:LibraryAccounting.BL.Services.ILibraryCurrentable.BookAdded">
+            <summary>
+            Событие, происходящее при добавлении книги
             </summary>
         </member>
         <member name="M:LibraryAccounting.BL.Services.ILibraryCurrentable.GetBooks">
@@ -260,8 +271,25 @@
             </summary>
             <returns>Список статусов книг</returns>
         </member>
+        <member name="M:LibraryAccounting.BL.Services.ILibraryCurrentable.AddBook(LibraryAccounting.BL.Dto.BooksDto)">
+            <summary>
+            Добавление книги
+            </summary>
+            <param name="book">книга</param>
+            <returns></returns>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.ILibraryCurrentable.GetBookById(System.Guid)">
+            <summary>
+            Получение текущего состояния книги по идентификатору
+            </summary>
+            <param name="id">идентификатор книги</param>
+            <returns></returns>
+        </member>
         <member name="T:LibraryAccounting.BL.Services.LibraryStateService">
             <summary>Сервис показа списка книг и работы с ним</summary>
+        </member>
+        <member name="E:LibraryAccounting.BL.Services.LibraryStateService.BookAdded">
+            <inheritdoc></inheritdoc>
         </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.#ctor(LibraryAccounting.DAL.DB.BaseLibraryContext,AutoMapper.IMapper,LibraryAccounting.BL.Services.IChangeble,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>Конструктор со внедрением зависимости контекста базы данных </summary>
@@ -273,10 +301,16 @@
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetCount">
             <inheritdoc></inheritdoc>
         </member>
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetBookById(System.Guid)">
+            <inheritdoc></inheritdoc>
+        </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetStatuses">
             <inheritdoc></inheritdoc>
         </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.GetBooks">
+            <inheritdoc></inheritdoc>
+        </member>
+        <member name="M:LibraryAccounting.BL.Services.LibraryStateService.AddBook(LibraryAccounting.BL.Dto.BooksDto)">
             <inheritdoc></inheritdoc>
         </member>
         <member name="M:LibraryAccounting.BL.Services.LibraryStateService.ChangeBookStatus(System.Guid,System.String)">

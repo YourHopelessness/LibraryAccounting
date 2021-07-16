@@ -39,7 +39,7 @@ else
                         <form method="post">
                             @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
                             {
-                                <button type="submit" asp-page-handler="AddBook"
+                                <button type="submit" asp-page="./BookActions/AddBook"
                                         class="btn btn-default">
                                     Добавить книгу
                                 </button>
@@ -141,7 +141,7 @@ else
                                 <td>@book.ISBN</td>
                                 <td>@book.Title</td>
                                 <td>@book.Author</td>
-                                <td>@book.PublishedDate.Year</td>
+                                <td>@book.PublishedDate.Value.Year</td>
                                 <td>@book.PublishedBy</td>
                                 <td>@book.Status</td>
                                 <td>@book.ReaderName</td>
@@ -157,12 +157,12 @@ else
                                 
                                     @if (book.Status == "В библиотеке")
                                     {
-                                        <a asp-action="Index/TakeBook" asp-route-id="@book.BookId">Взять книгу</a>
+                                        <a asp-page="BookActions/TakeBook" asp-route-id="@book.BookId">Взять книгу</a>
                                     }
                                     @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
                                     { 
-                                        <a asp-page="./EditBook" asp-route-id="@book.BookId">Редактировать</a>
-                                        <a asp-page="./BookStat" asp-route-id="@book.BookId">Статистика</a>
+                                        <a asp-page="BookActions/EditBook" asp-route-id="@book.BookId">Редактировать</a>
+                                        <a asp-page="BookActions/BookStat" asp-route-id="@book.BookId">Статистика</a>
                                     }
                                 </td>
                             </tr>

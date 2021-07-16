@@ -56,7 +56,7 @@ namespace LibraryAccounting
                     .AddCookie(options =>
                     {
                         options.LoginPath = new PathString("/Account/Login");
-                        options.AccessDeniedPath = new PathString("/Account/Login");
+                        options.AccessDeniedPath = new PathString("/Account/AccessDenied");
                     });
             services.AddAutoMapper(typeof(MapperConfigurateMap));
             services.AddRouting();
@@ -78,9 +78,11 @@ namespace LibraryAccounting
             else
             {
                 app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/errors/Error{0}");
                 app.UseHsts();
             }
 
+            app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             var cookiePolicyOptions = new CookiePolicyOptions

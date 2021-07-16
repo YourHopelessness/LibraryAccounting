@@ -24,7 +24,8 @@ namespace LibraryAccounting
                 .ForMember(l => l.Status, m => m.MapFrom(b => b.StatusId.ToString()))
                 .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate))
                 .ReverseMap();
-            CreateMap<BooksDto, BookListModel>()
+            CreateMap<BookListModel, BooksDto>()
+                .ForMember(l => l.BookId, m => m.MapFrom(b => b.BookId == Guid.Empty ? Guid.NewGuid() : b.BookId))
                 .ReverseMap();
 
             CreateMap<Changes, ChangesDto>()
