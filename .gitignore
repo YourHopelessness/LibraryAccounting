@@ -1,10 +1,10 @@
 .vs/
 .github/
-LibraryAccounting/bin/
-LibraryAccounting/obj/
-LibraryAccounting.DAL/bin/
-LibraryAccounting.DAL/obj/
-LibraryAccounting.BL/bin/
-LibraryAccounting.BL/obj/
+LibraryAccounting/bin
+LibraryAccounting.BL/bin
+LibraryAccounting.DAL/bin
+LibraryAccounting/obj
+LibraryAccounting.BL/obj
+LibraryAccounting.DAL/obj
 README.md
 .github/
