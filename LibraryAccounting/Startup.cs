@@ -52,6 +52,7 @@ namespace LibraryAccounting
             services.AddScoped<IReservable, ReservationManagerService>();
             services.AddScoped<IChangeble, ChangesManagerService>();
             services.AddScoped<IMailerSendable, MailingService>();
+            services.AddScoped<IEmployeesStatable, EmployeeService>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
@@ -78,11 +79,10 @@ namespace LibraryAccounting
             else
             {
                 app.UseExceptionHandler("/Error");
-                app.UseStatusCodePagesWithReExecute("/errors/Error{0}");
                 app.UseHsts();
             }
 
-            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithRedirects("/Error?error={0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             var cookiePolicyOptions = new CookiePolicyOptions

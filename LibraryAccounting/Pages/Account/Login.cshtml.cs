@@ -29,6 +29,10 @@ namespace LibraryAccounting.Pages.Account
         /// </summary>
         [BindProperty(SupportsGet = true)]
         public LoginModel Auth { get; set; }
+
+        /// <summary>
+        /// Сообщение об ошибки
+        /// </summary>
         [TempData]
         public string ErrMessage { get; set; }
 
@@ -37,6 +41,7 @@ namespace LibraryAccounting.Pages.Account
         /// </summary>
         /// <param name="auth"></param>
         /// <param name="mapper"></param>
+        /// <param name="httpContextAccessor"></param>
         public AuthModel(IAuthenticable auth, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _auth = auth;
@@ -46,11 +51,11 @@ namespace LibraryAccounting.Pages.Account
         /// <summary>
         /// Просмотр контента на странице
         /// </summary>
-        public void OnGet()
+        public async Task OnGetAsync()
         {
             if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                Redirect("/Index");
+                RedirectToPage("/1/Title%20ASC");
             }
             else
             {
@@ -67,21 +72,13 @@ namespace LibraryAccounting.Pages.Account
             if (employee != null)
             {
                 await _auth.Autentificate(employee.EmployeeUsername, employee.EmployeeName, employee.Role, Convert.ToString(employee.EmployeeId)); // аутентификация
-                return RedirectToPage();
+                var returnUrl = _httpContextAccessor.HttpContext.Request.Query["ReturnUrl"].ToString();
+                return Redirect(returnUrl.Length == 0 ? "/1/Title%20ASC" : returnUrl);
             }
             else
             {
                 ErrMessage = "Введены неверные регистрационные данные";
-                return RedirectToPage();
             }
-        }
-        /// <summary>
-        /// Выход из аккаунта
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> OnGetLogoutAsync()
-        {
-            await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToPage();
         }
     }

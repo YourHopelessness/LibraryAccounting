@@ -1,15 +1,56 @@
-﻿@page 
+﻿@page
 @model LibraryAccounting.Pages.Account.PersonalBiblioModel
-@{
-    ViewData["Title"] = "Моя библиотека";
+@{ ViewData["Title"] = "Моя библиотека"; }
+
+
+@if (Model.BooksList == null || Model.BooksList.Count() == 0)
+{
+<div class="row">
+    <div class="col-md">
+        <h2>@ViewData["Title"]</h2>
+        <div class="caption">
+            Вы еще не брали ни одной книги
+        </div>
+    </div>
+</div>
 }
+else
+{
+    <div class="row">
+        <div class="col-md">
+            <h2>@ViewData["Title"]</h2>
+            <hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().ISBN)</th>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().Title)</th>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().Author)</th>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().PublishedDate)</th>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().PublishedBy)</th>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().ReservationDate)</th>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().ReturningDate)</th>
+                        <th> @Html.DisplayNameFor(model => model.BooksList.First().Delay)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in Model.BooksList)
+                    {
+                        <tr bgcolor=@book.Colour>
+                            <td>@book.ISBN </td>
+                            <td>@book.Title</td>
+                            <td>@book.Author</td>
+                            <td> @book.PublishedDate</td>
+                            <td> @book.PublishedBy</td>
+                            <td> @book.ReservationDate</td>
+                            <td>@book.ReturningDate</td>
+                            <td>@book.Delay</td>
 
-<h1>@ViewData["Title"]</h1>
-
-<address>
-    Кто-то сделал<br>
-    Где-то живет<br>
-    <abbr title="Номер телефона">Какой-то номер:</abbr>
-    +7999999999
-</address>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
 

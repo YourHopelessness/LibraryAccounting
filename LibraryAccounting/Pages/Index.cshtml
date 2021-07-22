@@ -7,49 +7,54 @@
 <div style="font-size:20px">
     <span class="label label-success"></span>
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <td>
+                    <form>
+                        <div class="col-md-6">
+                            <h4>Выберите статус отображаемых книг:</h4>
+                            <select asp-for="@Model.Search.Status" asp-items="@Model.Search.Statuses">
+                                <option value="">All</option>
+                            </select>
+                            <input type="submit" value="Показать книги в данном статусе" />
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Поиск по ISBN: </h4>
+                            <input type="text" asp-for="@Model.Search.SearchString" value="" />
+                            <input type="submit" value="Найти" />
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form method="post">
+                        @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
+                        {
+                            <button type="submit" asp-page="./BookActions/AddBook"
+                                    class="btn btn-default">
+                                Добавить книгу
+                            </button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
 @if (Model.BooksList == null)
 {
     <p><em>Нет ни одного элемента для показа</em></p>
 }
+else if (Model.BooksList.Count == 0)
+{
+    <p><em>По вашему запросу ничего не найдено</em></p>
+}
 else
 {
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table">
-                <tr>
-                    <td>
-                        <form>
-                            <div class="col-md-6">
-                                <h4>Выберите статус отображаемых книг:</h4>
-                                <select asp-for="@Model.Search.Status" asp-items="@Model.Search.Statuses">
-                                    <option value="">All</option>
-                                </select>
-                                <input type="submit" value="Показать книги в данном статусе" />
-                            </div>
-                            <div class="col-md-6">
-                                <h4>Поиск по ISBN: </h4>
-                                <input type="text" asp-for="@Model.Search.SearchString" value="" />
-                                <input type="submit" value="Найти" />
-                            </div>
-                        </form>
-                     </td>
-                </tr>
-                <tr>
-                    <td>
-                        <form method="post">
-                            @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
-                            {
-                                <button type="submit" asp-page="./BookActions/AddBook"
-                                        class="btn btn-default">
-                                    Добавить книгу
-                                </button>
-                            }
-                        </form>
-                    </td>
-                </tr>
-             </table>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md">
             <form method="get" name="book_list" action="">
@@ -154,13 +159,13 @@ else
                                     <td>@book.Comment</td>
                                 }
                                 <td>
-                                
+
                                     @if (book.Status == "В библиотеке")
                                     {
                                         <a asp-page="BookActions/TakeBook" asp-route-id="@book.BookId">Взять книгу</a>
                                     }
                                     @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
-                                    { 
+                                    {
                                         <a asp-page="BookActions/EditBook" asp-route-id="@book.BookId">Редактировать</a>
                                         <a asp-page="BookActions/BookStat" asp-route-id="@book.BookId">Статистика</a>
                                     }
@@ -198,10 +203,4 @@ else
             </li>
         </ul>
     </div>
-}
-
-
-@section scripts{
-    <script>
-    </script>
 }

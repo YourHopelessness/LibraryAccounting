@@ -25,5 +25,9 @@ namespace LibraryAccounting.BL.Dto
 
         ///дата сдачи, отстутвует, если книга утеряна
         public DateTime? ReturningDate { get; set; }
+
+        ///дата сдачи, отстутвует, если книга утеряна
+        public bool ReturnFlag { get; set; }
+
     }
 }

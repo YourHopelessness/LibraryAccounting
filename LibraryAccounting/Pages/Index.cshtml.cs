@@ -65,6 +65,9 @@ namespace LibraryAccounting.Pages
         [BindProperty(SupportsGet = true)]
         public string SortBy { get; set; }
 
+        /// <summary>
+        /// Порядок сортировки
+        /// </summary>
         public string OrderBy { get; set; }
         #endregion
         /// <summary>Поиск по isbn коду</summary>
@@ -75,7 +78,8 @@ namespace LibraryAccounting.Pages
         public IndexModel(ILibraryCurrentable library,
                           IMapper mapper,
                           IChangeble changes,
-                          IReservable reservations)
+                          IReservable reservations
+            )
         {
             _library = library;
             _config = mapper;
@@ -87,6 +91,12 @@ namespace LibraryAccounting.Pages
         /// <inheritdoc></inheritdoc>
         public async Task OnGetAsync()
         {
+            var sortby = new String(SortBy.TakeWhile(s => s != ' ').ToArray());
+            if (typeof(BookListModel).GetProperty(sortby.ToString()) == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
             var f = Request.Headers["Referer"].ToString();
             var books = await _library.GetBooks();
             var reservations = await _reservations.GetReservations();

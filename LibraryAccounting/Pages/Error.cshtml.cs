@@ -36,21 +36,11 @@ namespace LibraryAccounting.Pages
             _logger = logger;
         }
         /// <inheritdoc></inheritdoc>
-        public void OnGet()
+        public void OnGet([FromQuery] int error)
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-
-            var exceptionHandlerPathFeature =
-            HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
-            {
-                ExceptionMessage = "File error thrown";
-                _logger.LogError(ExceptionMessage);
-            }
-            if (exceptionHandlerPathFeature?.Path == "/index")
-            {
-                ExceptionMessage += " from home page";
-            }
+            ExceptionMessage = $"Статус ошибки: {error}";
+            _logger.LogError(ExceptionMessage);
         }
     }
 }
