@@ -27,6 +27,10 @@ namespace LibraryAccounting
             CreateMap<BookListModel, BooksDto>()
                 .ForMember(l => l.BookId, m => m.MapFrom(b => b.BookId == Guid.Empty ? Guid.NewGuid() : b.BookId))
                 .ReverseMap();
+            CreateMap<TakeBookModel, BooksDto>()
+                .ReverseMap()
+                .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate.Value.ToString("dd.MM.yyyy")));
+
 
             CreateMap<Changes, ChangesDto>()
                     .ReverseMap();
@@ -41,7 +45,8 @@ namespace LibraryAccounting
 
             CreateMap<Reservations, BookInReservationsDto> ()
                 .ForMember(res => res.ReturningDate, m => m.MapFrom(r => r.ReturnDate))
-                .ForMember(res => res.ReturnFlag, m => m.MapFrom(r => r.ReturningFlag));
+                .ForMember(res => res.ReturnFlag, m => m.MapFrom(r => r.ReturningFlag))
+                .ReverseMap();
             CreateMap<Employees, BookInReservationsDto>()
                 .ForMember(dest => dest.ReaderName, m => m.MapFrom(src => src.FirstName + " " + src.LastName))
                 .ReverseMap();
@@ -67,8 +72,9 @@ namespace LibraryAccounting
                 .ForMember(dest => dest.PersonalPhone, m => m.MapFrom(src => src.ReaderPhone));
 
             CreateMap<BooksDto, OwnedBooksModel>()
-                .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate.Value.Year));
+                .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate.Value.Year.ToString()));
             CreateMap<BookInReservationsDto, OwnedBooksModel>()
+                .ForMember(dest => dest.ReaderName, m => m.MapFrom(src => src.ReaderName))
                 .ForMember(l => l.ReservationDate, m => m.MapFrom(b => b.ReservationDate.ToString("dd.MM.yyyy")))
                 .ForMember(l => l.ReturningDate, map => map.MapFrom(b => b.ReturningDate.GetValueOrDefault().ToString("dd.MM.yyyy")))
                 .ForMember(l => l.Delay, map => map.MapFrom(b => 

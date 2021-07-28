@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 
 namespace LibraryAccounting.Pages
 {
@@ -15,14 +19,11 @@ namespace LibraryAccounting.Pages
     public class ErrorModel : PageModel
     {
         /// <summary>
-        /// Статус ошибки
+        /// Словарь статусов ошибок и ошибок
         /// </summary>
-        public string RequestId { get; set; }
-
-        /// <summary>
-        /// Показ статуса ошибкиы
-        /// </summary>
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        private readonly Dictionary<int, string> _statusErrors = new()
+            {{ 404 , "Запрашиваемый ресурс не найден" },
+             { 400 , "Неверный запрос" } };
 
         /// <summary>
         /// Сообщение об ошибки
@@ -38,8 +39,16 @@ namespace LibraryAccounting.Pages
         /// <inheritdoc></inheritdoc>
         public void OnGet([FromQuery] int error)
         {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-            ExceptionMessage = $"Статус ошибки: {error}";
+            if (!Enum.IsDefined(typeof(HttpStatusCode), error)) error = 404;
+            string message = "";
+            if (_statusErrors.TryGetValue(error, out message))
+            {
+                ExceptionMessage = $"Статус ошибки: {error}\n{message}";
+            }
+            else
+            {
+                ExceptionMessage = $"Статус ошибки: {error}\n";
+            }
             _logger.LogError(ExceptionMessage);
         }
     }

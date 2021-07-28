@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LibraryAccounting.BL.Dto;
 using LibraryAccounting.DAL.DB;
+using LibraryAccounting.DAL.Entities;
 using LibraryAccounting.DAL.Repositories;
 
 namespace LibraryAccounting.BL.Services
@@ -35,12 +36,10 @@ namespace LibraryAccounting.BL.Services
         /// <summary>
         /// Резервация книги
         /// </summary>
-        /// <param name="book">книга</param>
-        /// <param name="employee">работник</param>
-        /// <param name="reservationDate">дата брони</param>
+        /// <param name="id">книга</param>
         /// <param name="returningDate">дата возвращения</param>
         /// <returns></returns>
-        public Task<bool> ReserveBook(Guid book, Guid employee, DateTime reservationDate, DateTime returningDate);
+        public Task<bool> ReserveBook(Guid id, DateTime returningDate);
 
         /// <summary>
         /// получить книги в использовании или за весь период
@@ -58,6 +57,7 @@ namespace LibraryAccounting.BL.Services
     {
         private readonly LibraryUOW _libraryUOW;
         private readonly IMapper _mapper;
+        private readonly IEmployeesStatable _employees;
 
         /// <summary>
         /// Событие создаваемое при изменении статуса книги
@@ -65,10 +65,13 @@ namespace LibraryAccounting.BL.Services
         public event FixChanges BookChanged;
 
         /// <inheritdoc></inheritdoc>
-        public ReservationManagerService(BaseLibraryContext libraryContext, IMapper mapper)
+        public ReservationManagerService(BaseLibraryContext libraryContext, 
+            IMapper mapper, 
+            IEmployeesStatable employees)
         {
             _libraryUOW = new LibraryUOW(libraryContext);
             _mapper = mapper;
+            _employees = employees;
         }
         /// <inheritdoc></inheritdoc>
         public Task<List<BookInReservationsDto>> GetReservations(Guid? bookId = null,
@@ -79,13 +82,16 @@ namespace LibraryAccounting.BL.Services
             switch(tagTime)
             {
                 case ReservationsPeriod.currently:
-                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => b.ReturnDate > DateTime.Now && b.ReturningFlag == false).Result, resevedBooks);
+                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => b.ReturnDate > DateTime.Now && 
+                                                                            b.ReturningFlag == false && 
+                                                                            (bookId == null || b.BookId == bookId)).Result, resevedBooks);
                     resevedBooks.ForEach(r =>
                                 r.ReaderName = _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().FirstName + " " +
                                                _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().LastName);
                     break;
                 case ReservationsPeriod.allTime:
-                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get().Result, resevedBooks);
+                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => (bookId == null || 
+                                                                                b.BookId == bookId)).Result, resevedBooks);
                     resevedBooks.ForEach(r =>
                                 r.ReaderName = _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().FirstName + " " +
                                                _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().LastName);
@@ -99,15 +105,18 @@ namespace LibraryAccounting.BL.Services
             return Task.FromResult(resevedBooks);
         }
         /// <inheritdoc></inheritdoc>
-        public Task<bool> ReserveBook(Guid book, Guid employee, DateTime reservationDate, DateTime returningDate)
+        public async Task<bool> ReserveBook(Guid id, DateTime returningDate)
         {
-            /* TODO
-             * Нвходим книгу для бронирования и человека в базе
-             * Записываем в таблицу бронирования
-             * посылаем сигнал о смене статуса книги на выдана
-             * если что-то пошло не так выбрасываем исключение (или true)
-             */
-            return Task.FromResult(false);
+            var reader = await _employees.GetReader();
+            BookInReservationsDto reservBook = new();
+            reservBook.ReaderId = reader.ReaderId;
+            reservBook.BookId = id;
+            reservBook.ReservationDate = DateTime.Now;
+            reservBook.ReturningDate = returningDate;
+            await Task.Run(() =>  _libraryUOW.Reservations.Insert(_mapper.Map<Reservations>(reservBook)));
+            _libraryUOW.Save();
+            //TODO делать запись изменения
+            return true;
         }
         
     }

@@ -49,13 +49,13 @@ namespace LibraryAccounting.Pages.Account
             _httpContextAccessor = httpContextAccessor;
         }
         /// <summary>
-        /// Просмотр контента на странице
+        /// ПРроверка, если пользователь авторизован, то перенаправлять на страницу личного кабинета
         /// </summary>
-        public async Task OnGetAsync()
+        public void OnGet()
         {
             if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                RedirectToPage("/1/Title%20ASC");
+                Response.Redirect("/Account/AboutMe");
             }
             else
             {
@@ -72,8 +72,7 @@ namespace LibraryAccounting.Pages.Account
             if (employee != null)
             {
                 await _auth.Autentificate(employee.EmployeeUsername, employee.EmployeeName, employee.Role, Convert.ToString(employee.EmployeeId)); // аутентификация
-                var returnUrl = _httpContextAccessor.HttpContext.Request.Query["ReturnUrl"].ToString();
-                return Redirect(returnUrl.Length == 0 ? "/1/Title%20ASC" : returnUrl);
+                return RedirectToPage("../Index");
             }
             else
             {

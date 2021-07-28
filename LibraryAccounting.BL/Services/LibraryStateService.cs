@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System.Net;
 
 namespace LibraryAccounting.BL.Services
 {
@@ -54,7 +55,7 @@ namespace LibraryAccounting.BL.Services
         /// </summary>
         /// <param name="book">книга</param>
         /// <returns></returns>
-        public Task AddBook(BooksDto book);
+        public Task AddEditBook(BooksDto book);
         /// <summary>
         /// Получение текущего состояния книги по идентификатору
         /// </summary>
@@ -99,14 +100,17 @@ namespace LibraryAccounting.BL.Services
         /// <inheritdoc></inheritdoc>
         public async Task<Dictionary<string, string>> GetStatuses()
         {
+            //Словарь статусов перевода из бд на русский
             var bookStatuses = new Dictionary<string, string>{
                 { "In library" , "В библиотеке" },
                 { "Issued" , "Выдана"},
                 { "Losted", "Утеряна"}};
+
             if (_httpAccessor.HttpContext.User.IsInRole("admin"))
             {
                 return await Task.Run(() => bookStatuses);
             }
+            //пользователю не должны показываться книги в статусе утеряна
             return await Task.Run(() => bookStatuses.Where(b => b.Value != "Утеряна").ToDictionary(dict => dict.Key, dict => dict.Value));
         }
 
@@ -130,14 +134,29 @@ namespace LibraryAccounting.BL.Services
         }
 
         /// <inheritdoc></inheritdoc>
-        public async Task AddBook(BooksDto book)
+        public async Task AddEditBook(BooksDto book)
         {
-            Books nBook = _mapper.Map<Books>(book);
-            nBook.StatusId = 2;
-            await Task.Run(() => _libraryUoW.Books.Insert(nBook));
-            await _libraryUoW.Save();
-            Guid changemakerId = Guid.Parse(_httpAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value);
-            await BookAdded(book.BookId, changemakerId, DateTime.Now, ChangeType.Added);
+            if (_httpAccessor.HttpContext.User.IsInRole("admin"))
+            {
+                if (book.BookId != Guid.Empty && GetBookById(book.BookId) != null)
+                {
+                    Books nBook = _mapper.Map<Books>(book);
+                    await Task.Run(() => _libraryUoW.Books.Update(nBook));
+                }
+                else
+                {
+                    Books nBook = _mapper.Map<Books>(book);
+                    nBook.StatusId = 2;
+                    await Task.Run(() => _libraryUoW.Books.Insert(nBook));
+                }
+                _libraryUoW.Save();
+                Guid changemakerId = Guid.Parse(_httpAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).First().Value);
+                await BookAdded(book.BookId, changemakerId, DateTime.Now, ChangeType.Added);
+            }
+            else
+            {
+                _httpAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden; // запретить добавление книги
+            }
         }
 
         /// <summary>

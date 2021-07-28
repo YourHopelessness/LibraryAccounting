@@ -15,6 +15,8 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Net;
 
 namespace LibraryAccounting.Pages
 {
@@ -25,7 +27,7 @@ namespace LibraryAccounting.Pages
     public class IndexModel : PageModel
     {
         /// <summary>Список отображаемых на станице книг</summary>
-        public List<BookListModel> BooksList { get; set; }
+        public ObservableCollection<BookListModel> BooksList { get; set; }
 
         private readonly ILibraryCurrentable _library;
         private readonly IReservable _reservations;
@@ -94,21 +96,23 @@ namespace LibraryAccounting.Pages
             var sortby = new String(SortBy.TakeWhile(s => s != ' ').ToArray());
             if (typeof(BookListModel).GetProperty(sortby.ToString()) == null)
             {
-                Response.StatusCode = 404;
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                Response.Redirect("/Error/?error=404");
                 return;
             }
             var f = Request.Headers["Referer"].ToString();
             var books = await _library.GetBooks();
             var reservations = await _reservations.GetReservations();
             var changes = await _changes.GetChanges();
-            BooksList = _config.Map<List<BookListModel>>(books);
-            reservations.ForEach(r => _config.Map(r, BooksList.Find(b => b.BookId == r.BookId)));
-            changes.ForEach(c => _config.Map(c, BooksList.Find(b => b.BookId == c.BookId)));
+            var bookList = _config.Map<List<BookListModel>>(books);
+            reservations.ForEach(r => _config.Map(r, bookList.Find(b => b.BookId == r.BookId)));
+            changes.ForEach(c => _config.Map(c, bookList.Find(b => b.BookId == c.BookId)));
+
             Count = await _library.GetCount();
 
             #region searching
             Search.Statuses = new SelectList(_library.GetStatuses().Result.Values);
-            var list = BooksList.Select(b => b);
+            var list = bookList.Select(b => b);
             if (!string.IsNullOrEmpty(Search.SearchString))
             {
                 list = list.Where(s => s.ISBN.Contains(Search.SearchString));
@@ -117,13 +121,14 @@ namespace LibraryAccounting.Pages
             {
                 list = list.Where(x => x.Status == Search.Status);
             }
-            Search.ISBNList = new SelectList(BooksList.Select(b => b.ISBN).Distinct());
+            Search.ISBNList = new SelectList(bookList.Select(b => b.ISBN).Distinct());
             #endregion
 
             #region sorting
 
             list = list.AsQueryable().OrderBy(SortBy + OrderBy);
-            BooksList = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            BooksList = new ObservableCollection<BookListModel>(list.Skip((CurrentPage - 1) * PageSize).Take(PageSize));
+
             #endregion
         }
     }

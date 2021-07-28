@@ -1,0 +1,69 @@
+﻿@page "{id?}/{untouchedform=true}"
+@model LibraryAccounting.Pages.BookActions.TakeBookModelPage
+@using Newtonsoft.Json;
+@using LibraryAccounting.Models;
+@{
+    ViewData["Title"] = "Бронирование книги";
+    ViewData["Book"] = JsonConvert.DeserializeObject<TakeBookModel>(TempData["Book"].ToString());
+}
+@if (Model.Book != null)
+{
+    <h2>@ViewData["Title"]</h2>
+    <hr>
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Book.ISBN" class="control-label"></label>
+                        <input asp-for="Book.ISBN" class="form-control" value="@((ViewData["Book"] as TakeBookModel).ISBN)" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book.Title" class="control-label"></label>
+                        <input asp-for="Book.Title" class="form-control" value="@((ViewData["Book"] as TakeBookModel).Title)" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book.Author" class="control-label"></label>
+                        <input asp-for="Book.Author" class="form-control" value="@((ViewData["Book"] as TakeBookModel).Author)" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book.PublishedBy" class="control-label"></label>
+                        <input asp-for="Book.PublishedBy" class="form-control" value="@((ViewData["Book"] as TakeBookModel).PublishedBy)" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book.PublishedDate" class="control-label"></label>
+                        <input asp-for="Book.PublishedDate" class="form-control" value="@((ViewData["Book"] as TakeBookModel).PublishedDate)" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book.ReturningTime" class="control-label"></label>
+                        <input type="date" asp-for="Book.ReturningTime" class="form-control"
+                              value="@((ViewData["Book"] as TakeBookModel).ReturningTime)"  />
+                        <span asp-validation-for="Book.ReturningTime"
+                              class="text-danger"/>
+                        @if (!Model.UntouchedForm.Value)@Html.ValidationMessage("InvalidReturningTime")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book.Comment" class="control-label"></label>
+                        <input type="text" asp-for="Book.Comment" class="form-control" 
+                               value="@((ViewData["Book"] as TakeBookModel).Comment)"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Взять книгу" class="btn btn-success" asp-page-handler="Take" />
+                        <input type="submit" class="cancel btn btn-outline-danger" value="Отмена" asp-page-handler="Cancel" />
+                    </div>
+                </form>
+            </div>
+        </div>
+     }
+}
+else
+{
+    <div class="row"><h4>Информация еще загружается</h4></div>
+}
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}

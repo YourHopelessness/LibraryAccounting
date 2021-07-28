@@ -61,6 +61,8 @@ namespace LibraryAccounting
                     });
             services.AddAutoMapper(typeof(MapperConfigurateMap));
             services.AddRouting();
+            services.AddMvc().AddSessionStateTempDataProvider();
+            services.AddSession();
             services.AddRazorPages();
             services.AddMemoryCache();
         }
@@ -81,7 +83,7 @@ namespace LibraryAccounting
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
+            app.UseSession();
             app.UseStatusCodePagesWithRedirects("/Error?error={0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();

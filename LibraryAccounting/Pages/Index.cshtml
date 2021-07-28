@@ -42,6 +42,9 @@
                     </form>
                 </td>
             </tr>
+            <tr>
+                <div class="col-md-12" ïd="main"></div>
+            </tr>
         </table>
     </div>
 </div>
@@ -72,64 +75,64 @@ else
                                 {
                                     Model.OrderBy = " ASC";
                                 }
-                                <a class="sort-link" asp-route-sortby=@String.Format("ISBN{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("ISBN", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().ISBN)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("Title{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().Title)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("Author{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("Author", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().Author)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("PublishedDate{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("PublishedDate", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().PublishedDate)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("PublishedBy{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("PublishedBy", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().PublishedBy)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("Status{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("Status", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().Status)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("ReaderName{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("ReaderName", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().ReaderName)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("ReservationDate{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("ReservationDate", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().ReservationDate)
                                 </a>
                             </th>
                             <th>
-                                <a class="sort-link" asp-route-sortby=@String.Format("ReturningDate{0}", Model.OrderBy)>
+                                <a class="sort-link" asp-route-sortby=@String.Concat("ReturningDate", Model.OrderBy)>
                                     @Html.DisplayNameFor(model => model.BooksList.First().ReturningDate)
                                 </a>
                             </th>
                             @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
                             {
                                 <th>
-                                    <a class="sort-link" asp-route-sortby=@String.Format("ChangemakerFullName{0}", Model.OrderBy)>
+                                    <a class="sort-link" asp-route-sortby=@String.Concat("ChangemakerFullName", Model.OrderBy)>
                                         @Html.DisplayNameFor(model => model.BooksList.First().ChangemakerFullName)
                                     </a>
                                 </th>
                                 <th>
-                                    <a class="sort-link" asp-route-sortby=@String.Format("ChangeDate{0}", Model.OrderBy)>
+                                    <a class="sort-link" asp-route-sortby=@String.Concat("ChangeDate", Model.OrderBy)>
                                         @Html.DisplayNameFor(model => model.BooksList.First().ChangeDate)
                                     </a>
                                 </th>
                                 <th>
-                                    <a class="sort-link" asp-route-sortby=@String.Format("Comment{0}", Model.OrderBy)>
+                                    <a class="sort-link" asp-route-sortby=@String.Concat("Comment", Model.OrderBy)>
                                         @Html.DisplayNameFor(model => model.BooksList.First().Comment)
                                     </a>
                                 </th>
@@ -158,18 +161,17 @@ else
                                     <td>@book.ChangeDate</td>
                                     <td>@book.Comment</td>
                                 }
-                                <td>
-
-                                    @if (book.Status == "В библиотеке")
-                                    {
-                                        <a asp-page="BookActions/TakeBook" asp-route-id="@book.BookId">Взять книгу</a>
-                                    }
-                                    @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
-                                    {
-                                        <a asp-page="BookActions/EditBook" asp-route-id="@book.BookId">Редактировать</a>
-                                        <a asp-page="BookActions/BookStat" asp-route-id="@book.BookId">Статистика</a>
-                                    }
-                                </td>
+                            <td>
+                                @if (book.Status == "В библиотеке")
+                                {
+                                    <a asp-page="BookActions/TakeBookPage" asp-route-id="@book.BookId">Взять книгу</a>
+                                }
+                                @if (HttpContextAccessor.HttpContext.User.IsInRole("admin"))
+                                {
+                                    <a asp-page="BookActions/EditBook" asp-route-id="@book.BookId">Редактировать</a>
+                                    <a asp-page="BookActions/BookStat" asp-route-id="@book.BookId">Статистика</a>
+                                }
+                            </td>
                             </tr>
                         }
                     </tbody>

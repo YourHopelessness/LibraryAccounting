@@ -148,13 +148,18 @@ namespace LibraryAccounting.BL.Services
             nChange.BookId = bookId;
             nChange.ChangemakerId = changemakerId;
             nChange.ChangeDate = changeTime;
+            var book = (await _libraryUOW.Books.Get(filter: b => b.Id == bookId)).FirstOrDefault();
+            var changemaker = (await _libraryUOW.Employees.Get(filter: e => e.Id == changemakerId))
+                              .FirstOrDefault();
             if (type == ChangeType.Other) nChange.Comment = comment;
-            else nChange.Comment = String.Format(commentChanges[(int)type],
-                changeTime,
-                _libraryUOW.Books.Get(filter: b => b.Id == bookId),
-                _libraryUOW.Employees.Get(filter: e => e.Id == changemakerId));
+            else nChange.Comment = 
+                String.Format(commentChanges[(int)type],
+                              changeTime,
+                              book.Title,
+                              changemaker.FirstName + " " + 
+                              changemaker.LastName);
              _libraryUOW.Changes.Insert(nChange);
-            await _libraryUOW.Save();
+             _libraryUOW.Save();
         }
     }
 }

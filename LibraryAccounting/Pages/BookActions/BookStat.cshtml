@@ -1,4 +1,100 @@
 ﻿@page
 @model LibraryAccounting.Pages.BookActions.StatsModel
 @{
+    ViewData["Title"] = "Статистика книги";
 }
+<div class="row">
+    <h2>@ViewData["Title"]</h2>
+    <hr>
+</div>
+<div class="row">
+    @using (Html.BeginForm())
+    {
+    <form class="form-control">
+        <input type="submit"
+               class="btn btn-default"
+               asp-page-handler="Cancel"
+               value="Вернуться назад" />
+        <input type="hidden" name="returnUrl" value="@TempData["ReturnUrl"]">
+    </form>
+        <input type="submit" class="btn btn-danger" asp-page-handler="Delete" asp-anti-forgery="true" value="Удалить" />
+    }
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-6">
+        <table width=100% height=100%>
+            <tr>
+                <td>
+                    <strong>@Html.DisplayNameFor(model => model.BookdInOwn.First().ISBN)</strong>
+                </td>
+                <td>
+                    <p>@Model.BookdInOwn.First().ISBN</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>@Html.DisplayNameFor(model => model.BookdInOwn.First().Title)</strong>
+                </td>
+                <td>
+                    <p>@Model.BookdInOwn.First().Title</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>@Html.DisplayNameFor(model => model.BookdInOwn.First().Author)</strong>
+                </td>
+                <td>
+                    <p>@Model.BookdInOwn.First().Author</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>@Html.DisplayNameFor(model => model.BookdInOwn.First().PublishedDate)</strong>
+                </td>
+                <td>
+                    <p>@Model.BookdInOwn.First().PublishedDate</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>@Html.DisplayNameFor(model => model.BookdInOwn.First().PublishedBy)</strong>
+                </td>
+                <td>
+                    <p>@Model.BookdInOwn.First().PublishedBy</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <h4>Читатели</h4>
+    <div class="col-md-6">
+        <table width=100% height=100%>
+            <thead>
+                <tr>
+                    <th>
+                        <p>@Html.DisplayNameFor(model => model.BookdInOwn.First().ReaderName)</p>
+                    </th>
+                    <th>
+                        <p>@Html.DisplayNameFor(model => model.BookdInOwn.First().ReservationDate)</p>
+                    </th>
+                    <th>
+                        <p>@Html.DisplayNameFor(model => model.BookdInOwn.First().ReturningDate)</p>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.BookdInOwn)
+                {
+                <tr bgcolor=@book.Colour>
+                    <td>@book.ReaderName</td>
+                    <td>@book.ReservationDate</td>
+                    <td>@book.ReturningDate</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -22,39 +22,58 @@ namespace LibraryAccounting.Pages.BookActions
         private readonly ILibraryCurrentable _stateService;
         private readonly IMapper _configMapper;
 
+        /// <summary>
+        /// Добавляемая книга
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public BookListModel NewBook { get; set; }
 
+        /// <summary>
+        /// Конутсруктор модели
+        /// </summary>
+        /// <param name="stateService"></param>
+        /// <param name="mapperConfig"></param>
         public AddModel(ILibraryCurrentable stateService, IMapper mapperConfig)
         {
             _stateService = stateService;
             _configMapper = mapperConfig;
         }
-        public void OnGet()
-        {
+        /// <summary>
+        /// гет запрос
+        /// </summary>
+        public void OnGet() { }
 
-        }
-
+        /// <summary>
+        /// Отмена
+        /// </summary>
+        /// <returns></returns>
         public IActionResult OnPostCancel()
         {
-            return Redirect("/1/Title%20ASC");
+            return RedirectToPage("../Index");
         }
 
+        /// <summary>
+        /// Добавление книги
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> OnPostAddAsync()
         {
-            if(NewBook.PublishedDate < DateTime.Now &&
-               NewBook.Title.DefaultIfEmpty().Count() > 0 &&
-               NewBook.Title.DefaultIfEmpty().Count() < 121 &
-               NewBook.Author.DefaultIfEmpty().Count() > 0 &&
-               NewBook.Author.DefaultIfEmpty().Count() < 121 &&
-               NewBook.PublishedBy.DefaultIfEmpty().Count() > 0 &&
-               NewBook.PublishedBy.DefaultIfEmpty().Count() < 121)
+            ModelState.ClearValidationState(nameof(NewBook));
+            if (!TryValidateModel(NewBook, nameof(NewBook)))
             {
-                BooksDto book = _configMapper.Map<BooksDto>(NewBook);
-                await _stateService.AddBook(book);
-                return RedirectToPage("/1/Title%20ASC");
+                var resultsGroupedByMembers =
+                    NewBook.Validate(new System.ComponentModel.DataAnnotations.ValidationContext(NewBook));
+                foreach (var member in resultsGroupedByMembers)
+                {
+                    ModelState.AddModelError(
+                        member.MemberNames.First(),
+                        member.ErrorMessage);
+                }
+                return Page();
             }
-            return Page();
+            BooksDto book = _configMapper.Map<BooksDto>(NewBook);
+            await _stateService.AddEditBook(book);
+            return RedirectToPage("../Index");
         }
     }
 }

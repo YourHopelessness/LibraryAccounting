@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,15 +12,21 @@ namespace LibraryAccounting.Models
     /// </summary>
     public class OwnedBooksModel
     {
-        /// ид книги
+        /// <summary>
+        /// ID Книги
+        /// </summary>
         public Guid BookId { get; set; }
 
-        /// код книги (может не быть)
+        /// <summary>
+        /// ISBN код кнги (может быть пустым)
+        /// </summary>
         [DisplayName("Код ISBN")]
         [DefaultValue("")]
         public string ISBN { get; set; }
 
-        /// название
+        /// <summary>
+        /// Название книги
+        /// </summary>
         [DisplayName("Название")]
         [DefaultValue("")]
         public string Title { get; set; }
@@ -34,16 +41,28 @@ namespace LibraryAccounting.Models
         [DefaultValue("")]
         public string PublishedBy { get; set; }
 
-        /// год издания книги
+        /// <summary>
+        /// Год издания книги
+        /// </summary>
         [DisplayName("Год издания")]
         public string PublishedDate { get; set; }
 
-        /// дата выдачи
+        /// <summary>
+        /// Читатель
+        /// </summary>
+        [DisplayName("Читатель")]
+        public string ReaderName { get; set; }
+
+        /// <summary>
+        /// Дата выдачи
+        /// </summary>
         [DisplayName("Дата выдачи")]
         [DefaultValue("")]
         public string ReservationDate { get; set; }
 
-        ///дата сдачи
+        /// <summary>
+        /// Дата возвращения
+        /// </summary>
         [DisplayName("Дата сдачи")]
         [DefaultValue("")]
         public string ReturningDate { get; set; }

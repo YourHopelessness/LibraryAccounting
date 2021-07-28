@@ -24,7 +24,7 @@ namespace LibraryAccounting.Pages.Account
         /// <summary>
         /// Список книг
         /// </summary>
-        public List<OwnedBooksModel> BooksList { get; set; }
+        public List<OwnedBooksModel> BooksList { get; set; } = new();
 
         /// <inheritdoc></inheritdoc>
         public PersonalBiblioModel(ILibraryCurrentable library,
@@ -46,11 +46,12 @@ namespace LibraryAccounting.Pages.Account
             reservations = reservations.Where(r => r.ReaderId == user.ReaderId).ToList();
             if (reservations.Count() != 0)
             {
-                reservations.ForEach(r => 
+                foreach(var reservation in reservations) 
                 {
-                    BooksList = _config.Map(_library.GetBooks().Result.Where(b => b.BookId == r.BookId), BooksList);
-                    _config.Map(r, BooksList.Find(b => b.BookId == r.BookId));
-                });
+                    var book = await _library.GetBookById(reservation.BookId);
+                    BooksList.Add(_config.Map<OwnedBooksModel>(book));
+                    _config.Map(reservation, BooksList.Find(b => b.BookId == reservation.BookId));
+                }
             }
         }
     }

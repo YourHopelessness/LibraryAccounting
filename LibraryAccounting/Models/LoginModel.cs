@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace LibraryAccounting.Models
 {
+    /// <summary>
+    /// Сущность страницы входа
+    /// </summary>
     public class LoginModel
     {
-        [Required(ErrorMessage = "Имя пользователя не может быть путсым")]
+        /// <summary>
+        /// Имя пользователя
+        /// </summary>
+        [Required(ErrorMessage = "Имя пользователя не может быть пустым")]
         [DataType(DataType.Text)]
         public string UserName { get; set; }
 
+        /// <summary>
+        /// Пароль
+        /// </summary>
         [Required(ErrorMessage = "Поле пароля не может быть пустым")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
