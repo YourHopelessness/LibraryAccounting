@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using System.Net;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryAccounting.Pages.BookActions
 {
@@ -99,7 +100,7 @@ namespace LibraryAccounting.Pages.BookActions
                 return RedirectToPage(new { id = Id, untouchedform = false });
             }
             BooksDto book = _configMapper.Map<BooksDto>(Edit);
-            await _stateService.AddEditBook(book);
+            await _stateService.AddEditBook(book, Edit.Comment);
             return RedirectToPage("../Index");
         }
     }

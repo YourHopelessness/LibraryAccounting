@@ -24,6 +24,12 @@ namespace LibraryAccounting.BL.Services
     /// </summary>
     public class MailingService : IMailerSendable
     {
+        /// <summary>
+        /// отправка писем
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
         public async Task Send(Guid employeeId, Guid bookId)
         {
             //TODO ассинхронная отправка почты

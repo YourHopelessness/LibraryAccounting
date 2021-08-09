@@ -61,15 +61,18 @@ namespace LibraryAccounting
                 .ForMember(dest => dest.ReaderId, m => m.MapFrom(src => src.Id))
                 .ForMember(dest => dest.ReaderWorkEmail, m => m.MapFrom(src => src.WorkEmail))
                 .ForMember(dest => dest.ReaderPersonalEmail, m => m.MapFrom(src => src.PersonalEmail))
-                .ForMember(dest => dest.ReaderPhone, m => m.MapFrom(src => src.PhoneNumber));
+                .ForMember(dest => dest.ReaderPhone, m => m.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.ReaderPosition, m => m.MapFrom(src => src.Position));
             CreateMap<DbLogin, EmployeeLoginDto>()
                 .ForMember(dest => dest.EmployeeUsername, m => m.MapFrom(src => src.UserName));
 
             CreateMap<ReadersDto, EmployeeInfoModel>()
+                .ForMember(dest => dest.Id, m => m.MapFrom(src => src.ReaderId))
                 .ForMember(dest => dest.FullName, m => m.MapFrom(src => src.ReaderName))
                 .ForMember(dest => dest.WorkEmail, m => m.MapFrom(src => src.ReaderWorkEmail))
                 .ForMember(dest => dest.PersonalEmail, m => m.MapFrom(src => src.ReaderPersonalEmail))
-                .ForMember(dest => dest.PersonalPhone, m => m.MapFrom(src => src.ReaderPhone));
+                .ForMember(dest => dest.PersonalPhone, m => m.MapFrom(src => src.ReaderPhone))
+                .ForMember(dest => dest.Position, m => m.MapFrom(src => src.ReaderPosition));
 
             CreateMap<BooksDto, OwnedBooksModel>()
                 .ForMember(l => l.PublishedDate, m => m.MapFrom(b => b.PublishedDate.Value.Year.ToString()));

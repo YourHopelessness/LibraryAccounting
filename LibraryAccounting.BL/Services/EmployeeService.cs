@@ -17,25 +17,53 @@ namespace LibraryAccounting.BL.Services
     /// </summary>
     public interface IEmployeesStatable
     {
-        public Task<ReadersDto> GetReader();
+        /// <summary>
+        /// Получение текущего пользователя/читалеля
+        /// </summary>
+        /// <returns></returns>
+        Task<ReadersDto> GetReader(Guid? readerId = null);
+
+        /// <summary>
+        /// Получение списка всех читателей
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<ReadersDto>> GetAllReaders();
     }
+    /// <summary>
+    /// Сервис работы с пользователями
+    /// </summary>
     public class EmployeeService : IEmployeesStatable
     {
         private readonly LibraryUOW _libraryUOW;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthenticable _auth;
 
-        public EmployeeService(BaseLibraryContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        /// <summary>
+        /// Контсруктор класса
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="mapper"></param>
+        /// <param name="auth"></param>
+        public EmployeeService(BaseLibraryContext context, 
+                                IMapper mapper, 
+                                IAuthenticable auth)
         {
             _libraryUOW = new LibraryUOW(context);
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
+            _auth = auth;
         }
-        public async Task<ReadersDto> GetReader()
+        /// <inheritdoc></inheritdoc>>
+        public async Task<ReadersDto> GetReader(Guid? readerId = null)
         {
-            Guid id = Guid.Parse(_httpContextAccessor.HttpContext.User.Claims.Where
-                                        (c => c.Type == ClaimTypes.NameIdentifier).First().Value);
-            return _mapper.Map<ReadersDto>((await _libraryUOW.Employees.Get(filter: e => e.Id == id)).FirstOrDefault());
+            if (!readerId.HasValue) readerId = _auth.GetUserId();
+            var reader = await _libraryUOW.Employees.Get(filter: e => e.Id == readerId);
+            return _mapper.Map<ReadersDto>(reader.FirstOrDefault());
+        }
+        /// <inheritdoc></inheritdoc>>
+        public async Task<IEnumerable<ReadersDto>> GetAllReaders()
+        {
+            var reader = await _libraryUOW.Employees.Get();
+            return _mapper.Map<IEnumerable<ReadersDto>>(reader);
         }
     }
 }

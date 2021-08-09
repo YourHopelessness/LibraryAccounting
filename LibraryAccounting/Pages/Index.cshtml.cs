@@ -111,7 +111,7 @@ namespace LibraryAccounting.Pages
             Count = await _library.GetCount();
 
             #region searching
-            Search.Statuses = new SelectList(_library.GetStatuses().Result.Values);
+            Search.Statuses = new SelectList(_library.GetStatuses().Values);
             var list = bookList.Select(b => b);
             if (!string.IsNullOrEmpty(Search.SearchString))
             {

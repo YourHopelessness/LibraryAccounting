@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,40 +16,37 @@ using Microsoft.AspNetCore.Authorization;
 namespace LibraryAccounting.Pages.Account
 {
     /// <summary>
-    /// Модель представления страницы
+    /// РњРѕРґРµР»СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃС‚СЂР°РЅРёС†С‹
     /// </summary>
     public class AuthModel : PageModel
     {
         private readonly IAuthenticable _auth;
-        private readonly IMapper _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
-        /// Входные данные
+        /// Р’С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
         /// </summary>
         [BindProperty(SupportsGet = true)]
         public LoginModel Auth { get; set; }
 
         /// <summary>
-        /// Сообщение об ошибки
+        /// РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРё
         /// </summary>
         [TempData]
         public string ErrMessage { get; set; }
 
         /// <summary>
-        /// Конструктор страницы с DI
+        /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃС‚СЂР°РЅРёС†С‹ СЃ DI
         /// </summary>
         /// <param name="auth"></param>
-        /// <param name="mapper"></param>
         /// <param name="httpContextAccessor"></param>
-        public AuthModel(IAuthenticable auth, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public AuthModel(IAuthenticable auth, IHttpContextAccessor httpContextAccessor)
         {
             _auth = auth;
-            _config = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
         /// <summary>
-        /// ПРроверка, если пользователь авторизован, то перенаправлять на страницу личного кабинета
+        /// РџР СЂРѕРІРµСЂРєР°, РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ, С‚Рѕ РїРµСЂРµРЅР°РїСЂР°РІР»СЏС‚СЊ РЅР° СЃС‚СЂР°РЅРёС†Сѓ Р»РёС‡РЅРѕРіРѕ РєР°Р±РёРЅРµС‚Р°
         /// </summary>
         public void OnGet()
         {
@@ -59,11 +56,11 @@ namespace LibraryAccounting.Pages.Account
             }
             else
             {
-                ErrMessage ??= "Войдите чтобы просматривать контент";
+                ErrMessage ??= "Р’РѕР№РґРёС‚Рµ С‡С‚РѕР±С‹ РїСЂРѕСЃРјР°С‚СЂРёРІР°С‚СЊ РєРѕРЅС‚РµРЅС‚";
             }
         }
         /// <summary>
-        /// Вход в аккаунт
+        /// Р’С…РѕРґ РІ Р°РєРєР°СѓРЅС‚
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnPostAsync()
@@ -71,12 +68,12 @@ namespace LibraryAccounting.Pages.Account
             EmployeeLoginDto employee = await _auth.EmployeeLoginInfo(Auth.UserName, Auth.Password); 
             if (employee != null)
             {
-                await _auth.Autentificate(employee.EmployeeUsername, employee.EmployeeName, employee.Role, Convert.ToString(employee.EmployeeId)); // аутентификация
+                await _auth.Autentificate(employee.EmployeeUsername, employee.EmployeeName, employee.Role, Convert.ToString(employee.EmployeeId)); // Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ
                 return RedirectToPage("../Index");
             }
             else
             {
-                ErrMessage = "Введены неверные регистрационные данные";
+                ErrMessage = "Р’РІРµРґРµРЅС‹ РЅРµРІРµСЂРЅС‹Рµ СЂРµРіРёСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ РґР°РЅРЅС‹Рµ";
             }
             return RedirectToPage();
         }

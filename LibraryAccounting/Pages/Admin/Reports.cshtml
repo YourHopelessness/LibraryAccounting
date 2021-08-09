@@ -1,3 +1,97 @@
 ﻿@page
 @model LibraryAccounting.Pages.Admin.ReportsModel
-@{ ViewData["Title"] = "Reports"; }
+@{ ViewData["Title"] = "Отчеты по статистике использования книг"; }
+
+<div>
+    <h1>@ViewData["Title"]</h1>
+</div>
+<hr>
+<div class="container">
+    <div class="row">
+        <form method="post">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="@Model.ReportsSettings.CurrentReportType">Выберите отчет:</label>
+                    <br>
+                    <select id="reports" class="form-control"
+                            asp-for="@Model.ReportsSettings.CurrentReportType"
+                            onchange="sendReportTypes()">
+                        <option value="">Выберите...</option>
+                        @foreach (var reportTypes in Model.ReportsSettings.ReportType)
+                        {
+                            <option>@reportTypes.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Выберите период составления:</label>
+                    <br>
+                    <select id="reports" class="form-control"
+                            asp-for="@Model.ReportsSettings.CurrentPeriod"
+                            onchnge="onchange=" this.form.submit();">
+                        <option value="">Выберите...</option>
+                        @foreach (var periodType in Model.ReportsSettings.Period)
+                        {
+                            <option>@periodType.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-inline" id="conretePeriod">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div data-role="dynamic-fields">
+                    <div class="form-inline">
+                        <p class="oi-bold">Содержание отчета</p>
+                        <br>
+                        @foreach (var property in Model.ReportsSettings.Propetries)
+                        {
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="field-name" placeholder="@property" disabled>
+                            </div>
+                        }
+                        <button class="btn btn-danger" data-role="remove">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            // Remove button click
+            $(document).on('click',
+                '[data-role="dynamic-fields"] > .form-inline [data-role="remove"]',
+                function (e) {
+                    e.preventDefault();
+                    $(this).closest('.form-inline').remove();
+                });
+        });
+
+        function sendReportTypes() {
+            var selectedFilter = $("#reports").val();
+            $.ajax({
+                type: "POST",
+                url: "Admin/Report/UpdateSettings",
+                data: { selectedFilter: selectedFilter },
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (result) {
+                    alert("success");
+                },
+                error: function () {
+                    alert("there was an error");
+                }
+            })
+        }
+    </script>
+}

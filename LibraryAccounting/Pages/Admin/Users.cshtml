@@ -1,5 +1,50 @@
 ﻿@page "/Admin/Users"
 @model LibraryAccounting.Pages.Admin.UserModel
-@{ ViewData["Title"] = "Users"; }
+@{ 
+    ViewData["Title"] = "Пользователи"; 
+}
 
 <h1>@ViewData["Title"]</h1>
+<hr>
+@if (Model.Users == null)
+{
+    <p><em>Нет ни одного элемента для показа</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th> @Html.DisplayNameFor(model => model.Users.First().FullName)</th>
+                        <th> @Html.DisplayNameFor(model => model.Users.First().Position)</th>
+                        <th> @Html.DisplayNameFor(model => model.Users.First().WorkEmail)</th>
+                        <th> @Html.DisplayNameFor(model => model.Users.First().CurrentReservationCount)</th>
+                        <th> @Html.DisplayNameFor(model => model.Users.First().AllTimeReservationCount)</th>
+                        <th> @Html.DisplayNameFor(model => model.Users.First().DelayedBooksCount)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Position</td>
+                        <td>@user.WorkEmail</td>
+                        <td>@user.CurrentReservationCount</td>
+                        <td>@user.AllTimeReservationCount</td>
+                        <td>
+                            @user.DelayedBooksCount
+                            @if (user.DelayedBooksCount > 0)
+                            {
+                                <a href="#">Напомнить</a>
+                            }
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

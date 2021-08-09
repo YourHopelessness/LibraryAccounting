@@ -4,8 +4,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LibraryAccounting.DAL.Migrations
 {
+    /// <summary>
+    /// миграция
+    /// </summary>
     public partial class DbMigration : Migration
     {
+        /// <summary>
+        /// примененеие миграции
+        /// </summary>
+        /// <param name="migrationBuilder"></param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -194,7 +201,10 @@ namespace LibraryAccounting.DAL.Migrations
                 table: "user_roles",
                 column: "role_id");
         }
-
+        /// <summary>
+        /// откат миграции
+        /// </summary>
+        /// <param name="migrationBuilder"></param>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

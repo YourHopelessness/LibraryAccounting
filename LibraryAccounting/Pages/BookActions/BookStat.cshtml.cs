@@ -56,22 +56,28 @@ namespace LibraryAccounting.Pages.BookActions
                 Response.Redirect($"/Error/?error={Response.StatusCode}");
                 return;
             }
-            BookdInOwn = _configMapper.Map<List<OwnedBooksModel>>(_reservationManager.GetReservations(Id).Result);
+            BookdInOwn = _configMapper.Map<List<OwnedBooksModel>>(_reservationManager.GetReservations(Id, ReservationsPeriod.allTime).Result);
             BookdInOwn.ForEach(b => b = _configMapper.Map(book, b));
-            BookdInOwn.OrderByDescending(b => b.ReservationDate);
-            TempData["ReturnUrl"] = Request.Headers["Referer"].ToString();
+            BookdInOwn = BookdInOwn.OrderByDescending(b => b.ReservationDate).ToList();
         }
 
         /// <summary>
-        ///  нопка возвращени€ на обратную страницу
+        ///  нопка ”далени€ книги
         /// </summary>
         /// <returns></returns>
-        public IActionResult OnPostCancel([FromForm] string returnUrl)
+        public IActionResult OnPostDelete()
         {
-            if (returnUrl != null)
-            {
-                return Redirect(returnUrl);
-            }
+            _stateService.DeleteBook(Id.GetValueOrDefault());
+            return Redirect("../Index");
+        }
+
+        /// <summary>
+        ///  нопка смена статуса книги на утер€на
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult OnPostLosted()
+        {
+            _stateService.LostBook(Id.GetValueOrDefault());
             return Redirect("../Index");
         }
     }

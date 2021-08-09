@@ -71,6 +71,86 @@
             <param name="args"></param>
             <returns>Контекст базы данных</returns>
         </member>
+        <member name="T:LibraryAccounting.DAL.Entities.Books">
+            <summary>
+            Сущность книги
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Books.Id">
+            <summary>
+            Id книги
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Books.ISBN">
+            <summary>
+            Код ISBN
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Books.Title">
+            <summary>
+            Тазвание книги
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Books.Author">
+            <summary>
+            Вытор книги
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Books.PublishedBy">
+            <summary>
+            Издательство
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Books.PublishedDate">
+            <summary>
+            Дата публикации
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Books.StatusId">
+            <summary>
+            Текущий статус
+            </summary>
+        </member>
+        <member name="T:LibraryAccounting.DAL.Entities.BooksStatuses">
+            <summary>
+            Сущность справочника статусов книг
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.BooksStatuses.Id">
+            <summary>
+            Id для связи по ключам
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.BooksStatuses.Status">
+            <summary>
+            название статуса
+            </summary>
+        </member>
+        <member name="T:LibraryAccounting.DAL.Entities.Changes">
+            <summary>
+            Сущность изменений
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Changes.ChangemakerId">
+            <summary>
+            Id сотрудника внесшего изменение
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Changes.BookId">
+            <summary>
+            Ид книги по которой вносились измененеия
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Changes.ChangeDate">
+            <summary>
+            дата ихмененеия
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Changes.Comment">
+            <summary>
+            комментарий
+            </summary>
+        </member>
         <member name="T:LibraryAccounting.DAL.Entities.DbLogin">
             <summary>Таблица аутентификации</summary>
         </member>
@@ -85,6 +165,46 @@
         </member>
         <member name="P:LibraryAccounting.DAL.Entities.DbLogin.Salt">
             <summary>Соль</summary>
+        </member>
+        <member name="T:LibraryAccounting.DAL.Entities.Employees">
+            <summary>
+            Сущность сотрудников
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Employees.Id">
+            <summary>
+            ид сотрудника
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Employees.FirstName">
+            <summary>
+            имя
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Employees.LastName">
+            <summary>
+            Фвмилия
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Employees.Position">
+            <summary>
+            Должность
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Employees.WorkEmail">
+            <summary>
+            Рабочая почта
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Employees.PersonalEmail">
+            <summary>
+            личная почта
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Employees.PhoneNumber">
+            <summary>
+            телефонный номер
+            </summary>
         </member>
         <member name="T:LibraryAccounting.DAL.Entities.Reservations">
             <summary>бронирование </summary>
@@ -106,6 +226,87 @@
         </member>
         <member name="P:LibraryAccounting.DAL.Entities.Reservations.Comment">
             <summary>комментарий к брони </summary>
+        </member>
+        <member name="T:LibraryAccounting.DAL.Entities.Roles">
+            <summary>
+            Сущность справочника ролей
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Roles.Id">
+            <summary>
+            ид роли
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Roles.Name">
+            <summary>
+            название роли
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.Roles.Description">
+            <summary>
+            описание полномочий роли
+            </summary>
+        </member>
+        <member name="T:LibraryAccounting.DAL.Entities.UserRoles">
+            <summary>
+            таблица связей роли ей сотруднов
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.UserRoles.EmployeeId">
+            <summary>
+            ид сотрудника
+            </summary>
+        </member>
+        <member name="P:LibraryAccounting.DAL.Entities.UserRoles.RoleId">
+            <summary>
+            роль сотрудника
+            </summary>
+        </member>
+        <member name="T:LibraryAccounting.DAL.Migrations.DbMigration">
+            <summary>
+            миграция
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.DAL.Migrations.DbMigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <summary>
+            примененеие миграции
+            </summary>
+            <param name="migrationBuilder"></param>
+        </member>
+        <member name="M:LibraryAccounting.DAL.Migrations.DbMigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <summary>
+            откат миграции
+            </summary>
+            <param name="migrationBuilder"></param>
+        </member>
+        <member name="M:LibraryAccounting.DAL.Migrations.DbMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            цель миграции
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:LibraryAccounting.DAL.Migrations.NewMigration">
+            <summary>
+            миграция
+            </summary>
+        </member>
+        <member name="M:LibraryAccounting.DAL.Migrations.NewMigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <summary>
+            применение миграции
+            </summary>
+            <param name="migrationBuilder"></param>
+        </member>
+        <member name="M:LibraryAccounting.DAL.Migrations.NewMigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <summary>
+            откат миграции
+            </summary>
+            <param name="migrationBuilder"></param>
+        </member>
+        <member name="M:LibraryAccounting.DAL.Migrations.NewMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            правила примененеия миграции
+            </summary>
+            <param name="modelBuilder"></param>
         </member>
         <member name="T:LibraryAccounting.DAL.Repositories.EntityException">
             Класс-исключение

@@ -2,8 +2,15 @@
 
 namespace LibraryAccounting.DAL.Migrations
 {
+    /// <summary>
+    /// миграция
+    /// </summary>
     public partial class NewMigration : Migration
     {
+        /// <summary>
+        /// применение миграции
+        /// </summary>
+        /// <param name="migrationBuilder"></param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddForeignKey(
@@ -23,7 +30,10 @@ namespace LibraryAccounting.DAL.Migrations
                 onDelete: ReferentialAction.Cascade
             );
         }
-
+        /// <summary>
+        /// откат миграции
+        /// </summary>
+        /// <param name="migrationBuilder"></param>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

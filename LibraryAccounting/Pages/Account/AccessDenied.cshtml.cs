@@ -1,6 +1,7 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,25 +10,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace LibraryAccounting.Pages.Account
 {
     /// <summary>
-    /// Модель для отобржения отстутвия лдоступа к данному ресурсу у пользователя
+    /// РњРѕРґРµР»СЊ РґР»СЏ РѕС‚РѕР±СЂР¶РµРЅРёСЏ РѕС‚СЃС‚СѓС‚РІРёСЏ Р»РґРѕСЃС‚СѓРїР° Рє РґР°РЅРЅРѕРјСѓ СЂРµСЃСѓСЂСЃСѓ Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     /// </summary>
     public class AccessDeniedModel : PageModel
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public string Message { get; set; }
-
-        /// <inheritdoc></inheritdoc>
-        public AccessDeniedModel(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        /// <summary>
+        /// РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
+        /// </summary>
+        public string Message { get; set; } 
 
         /// <inheritdoc></inheritdoc>
-        public async Task OnGetAsync()
+        public void OnGet()
         {
-            _httpContextAccessor.HttpContext.Response.StatusCode = 403;
-            Message = _httpContextAccessor.HttpContext.Response.StatusCode.ToString();
+            Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            Message = Response.StatusCode.ToString();
         }
     }
 }

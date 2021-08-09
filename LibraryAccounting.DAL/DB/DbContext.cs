@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using LibraryAccounting.DAL.Entities;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +16,9 @@ namespace LibraryAccounting.DAL.DB
     {
         /// <summary> Конструктор создания контекста с помощью внедрения зависимости</summary>
         /// <param name="options">Параметр для внедрения зависимости</param>
-        public BaseLibraryContext(DbContextOptions<LibraryDbContext> options) : base(options) { }
+        public BaseLibraryContext(DbContextOptions<LibraryDbContext> options) : base(options)
+        { }
+
 
         /// <summary>Таблица явок-паролей</summary>
         public DbSet<DbLogin> Logins { get; set; }
@@ -192,6 +196,13 @@ namespace LibraryAccounting.DAL.DB
     /// <summary> Главный контекст базы данных</summary>
     public class LibraryDbContext : BaseLibraryContext
     {
+        private static readonly ILoggerFactory _loggerFactory =
+            LoggerFactory.Create(b =>
+            {
+                b.AddConsole();
+                //b.AddFilter("Database.Command", LogLevel.Trace);
+            });
+
         /// <inheritdoc></inheritdoc>
         public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options) { }
 
@@ -204,6 +215,8 @@ namespace LibraryAccounting.DAL.DB
         /// <inheritdoc></inheritdoc>>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseLoggerFactory(_loggerFactory)
+                .EnableSensitiveDataLogging();
             optionsBuilder.UseNpgsql(DbConfig.GetConnectionString());
         }
     }

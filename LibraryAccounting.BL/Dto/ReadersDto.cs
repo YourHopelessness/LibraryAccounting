@@ -13,9 +13,6 @@ namespace LibraryAccounting.BL.Dto
         /// идентификатор читателя
         public Guid ReaderId { get; set; }
 
-        /// книги в личной библиотеке
-        public List<BooksDto> BooksInOwn { get; set; }
-
         /// имя читателя
         public string ReaderName { get; set; }
 
@@ -27,5 +24,8 @@ namespace LibraryAccounting.BL.Dto
 
         /// телефон
         public string ReaderPhone { get; set; }
+
+        /// должность читателя
+        public string ReaderPosition { get; set; }
     }
 }

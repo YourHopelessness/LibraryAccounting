@@ -26,15 +26,21 @@ namespace LibraryAccounting.BL.Services
         /// Получение аутентификационных данных пользователя
         /// </summary>
         /// <returns></returns>
-        public Task<EmployeeLoginDto> EmployeeLoginInfo(string username, string password);
+        Task<EmployeeLoginDto> EmployeeLoginInfo(string username, string password);
         /// <summary>
         /// Метод аутентификации пользователя
         /// </summary>
         /// <param name="username"></param>
         /// <param name="employeeName"></param>
         /// <param name="role"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public Task Autentificate(string username, string employeeName, string role, string id);
+        Task Autentificate(string username, string employeeName, string role, string id);
+        /// <summary>
+        /// Получить текущего юзера сессии по id 
+        /// </summary>
+        /// <returns></returns>
+        Guid GetUserId();
     }
     /// <summary>
     /// Сервис аутентификации
@@ -46,6 +52,12 @@ namespace LibraryAccounting.BL.Services
         private readonly IMapper _mapper;
         private byte[] globalSalt = Encoding.ASCII.GetBytes("Dear Math, grow up and solve your own problems");
 
+        /// <summary>
+        /// контсруктор
+        /// </summary>
+        /// <param name="libraryContext"></param>
+        /// <param name="mapper"></param>
+        /// <param name="httpContextAccessor"></param>
         public AuthService(BaseLibraryContext libraryContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _libraryUOW = new LibraryUOW(libraryContext);
@@ -99,5 +111,12 @@ namespace LibraryAccounting.BL.Services
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
         }
+
+
+        /// <inheritdoc></inheritdoc>>
+        public Guid GetUserId() => Guid.Parse(_httpContextAccessor.
+            HttpContext.User.Claims.
+            Where(c => c.Type == ClaimTypes.NameIdentifier).
+            First().Value);
     }
 }

@@ -12,7 +12,6 @@ namespace LibraryAccounting.DAL.Entities
     [Table("auth")]
     public class DbLogin
     {
-
         /// <summary>Ник</summary>
         [Required]
         public string UserName { get; set; }

@@ -40,6 +40,11 @@
                     @if (!Model.UntouchedForm.Value)@Html.ValidationMessage("InvalidPublishedDate")
                 </div>
                 <div class="form-group">
+                    <label asp-for="Edit.Comment" class="control-label"></label>
+                    <input type="date" asp-for="Edit.Comment" class="form-control" value="@((ViewData["Edit"] as BookListModel).Comment)" />
+                    <span asp-validation-for="Edit.Comment" class="text-danger" />
+                </div>
+                <div class="form-group">
                     <input type="submit" value="Изменить" class="btn btn-success" asp-page-handler="Edit" />
                     <input type="submit" class="cancel btn btn-outline-danger" value="Отмена" asp-page-handler="Cancel" />
                 </div>
@@ -47,7 +52,20 @@
         </div>
     </div>
 }
-    @section Scripts {
-        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    }
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"
+            crossorigin="anonymous"
+            integrity="sha384-rZfj/ogBloos6wzLGpPkkOr/gpkBNLZ6b6yLy4o+ok+t/SAKlL5mvXLr0OXNi1Hp"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+            crossorigin="anonymous"
+            integrity="sha384-ifv0TYDWxBHzvAk2Z0n8R434FL1Rlv/Av18DXE43N/1rvHyOG4izKst0f2iSLdds"></script>
+
+}

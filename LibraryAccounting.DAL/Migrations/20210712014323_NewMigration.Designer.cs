@@ -13,6 +13,10 @@ namespace LibraryAccounting.DAL.Migrations
     [Migration("20210712014323_NewMigration")]
     partial class NewMigration
     {
+        /// <summary>
+        /// правила примененеия миграции
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

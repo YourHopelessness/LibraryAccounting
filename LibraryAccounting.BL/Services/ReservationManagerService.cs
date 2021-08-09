@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using LibraryAccounting.BL.Dto;
 using LibraryAccounting.DAL.DB;
 using LibraryAccounting.DAL.Entities;
 using LibraryAccounting.DAL.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LibraryAccounting.BL.Services
 {
@@ -25,14 +24,23 @@ namespace LibraryAccounting.BL.Services
     }
 
     /// <summary>
+    /// Делегат для вызова обработчика смены статуса книг
+    /// </summary>
+    /// <param name="book"></param>
+    /// <param name="status"></param>
+    /// <returns></returns>
+    public delegate Task FixBookStatus(Guid book, string status);
+
+    /// <summary>
     /// Интерфес для получения и регитсрации бронирования
     /// </summary>
     public interface IReservable
     {
         /// <summary>
-        /// Событие регитстрации
+        /// Событие регистрации
         /// </summary>
-        public event FixChanges BookChanged;
+        public event FixBookStatus BookReservation;
+
         /// <summary>
         /// Резервация книги
         /// </summary>
@@ -53,20 +61,21 @@ namespace LibraryAccounting.BL.Services
                                                                  Tuple<DateTime, DateTime> period = null);
     }
 
+    /// <summary>
+    /// Сервис бронирования
+    /// </summary>
     public class ReservationManagerService : IReservable
     {
         private readonly LibraryUOW _libraryUOW;
         private readonly IMapper _mapper;
         private readonly IEmployeesStatable _employees;
 
-        /// <summary>
-        /// Событие создаваемое при изменении статуса книги
-        /// </summary>
-        public event FixChanges BookChanged;
+        ///<inheritdoc></inheritdoc>
+        public event FixBookStatus BookReservation;
 
         /// <inheritdoc></inheritdoc>
-        public ReservationManagerService(BaseLibraryContext libraryContext, 
-            IMapper mapper, 
+        public ReservationManagerService(BaseLibraryContext libraryContext,
+            IMapper mapper,
             IEmployeesStatable employees)
         {
             _libraryUOW = new LibraryUOW(libraryContext);
@@ -79,18 +88,17 @@ namespace LibraryAccounting.BL.Services
                                                                  Tuple<DateTime, DateTime> period = null)
         {
             var resevedBooks = new List<BookInReservationsDto>();
-            switch(tagTime)
+            switch (tagTime)
             {
                 case ReservationsPeriod.currently:
-                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => b.ReturnDate > DateTime.Now && 
-                                                                            b.ReturningFlag == false && 
+                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => !b.ReturningFlag.Value &&
                                                                             (bookId == null || b.BookId == bookId)).Result, resevedBooks);
                     resevedBooks.ForEach(r =>
                                 r.ReaderName = _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().FirstName + " " +
                                                _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().LastName);
                     break;
                 case ReservationsPeriod.allTime:
-                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => (bookId == null || 
+                    resevedBooks = _mapper.Map(_libraryUOW.Reservations.Get(filter: b => (bookId == null ||
                                                                                 b.BookId == bookId)).Result, resevedBooks);
                     resevedBooks.ForEach(r =>
                                 r.ReaderName = _libraryUOW.Employees.Get(filter: e => e.Id == r.ReaderId).Result.FirstOrDefault().FirstName + " " +
@@ -113,11 +121,11 @@ namespace LibraryAccounting.BL.Services
             reservBook.BookId = id;
             reservBook.ReservationDate = DateTime.Now;
             reservBook.ReturningDate = returningDate;
-            await Task.Run(() =>  _libraryUOW.Reservations.Insert(_mapper.Map<Reservations>(reservBook)));
+            _libraryUOW.Reservations.Insert(_mapper.Map<Reservations>(reservBook));
             _libraryUOW.Save();
-            //TODO делать запись изменения
+            await BookReservation?.Invoke(id, "reserved");
             return true;
         }
-        
+
     }
 }

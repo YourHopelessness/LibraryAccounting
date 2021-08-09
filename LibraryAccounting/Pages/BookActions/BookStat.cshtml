@@ -10,14 +10,14 @@
 <div class="row">
     @using (Html.BeginForm())
     {
-    <form class="form-control">
-        <input type="submit"
-               class="btn btn-default"
-               asp-page-handler="Cancel"
-               value="Вернуться назад" />
-        <input type="hidden" name="returnUrl" value="@TempData["ReturnUrl"]">
+    <form class="form-control" method="post">
+        <input type="submit" class="btn btn-danger"
+               asp-page-handler="Delete"
+               asp-anti-forgery="true" value="Удалить" />
+        <input type="submit" class="btn btn-primary"
+               asp-page-handler="Losted"
+               asp-anti-forgery="true" value="Сменить статс на утеряна" />
     </form>
-        <input type="submit" class="btn btn-danger" asp-page-handler="Delete" asp-anti-forgery="true" value="Удалить" />
     }
 </div>
 <hr>

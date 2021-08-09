@@ -8,10 +8,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LibraryAccounting.Pages.Admin
 {
+    /// <summary>
+    /// Статистика по книгам
+    /// </summary>
     [Authorize(Roles = "admin")]
     public class StatsModel: PageModel
     {
-
+        /// <summary>
+        /// гет метод
+        /// </summary>
         public void OnGet()
         {
            

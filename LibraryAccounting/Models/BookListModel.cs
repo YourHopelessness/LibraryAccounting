@@ -21,25 +21,25 @@ namespace LibraryAccounting.Models
 
         /// название
         [DisplayName("Название")]
-        [Required(ErrorMessage = "Название не может быь пустым")]
+        [Required(ErrorMessage = "Название не может быть пустым")]
         [DefaultValue("")]
         public string Title { get; set; }
 
         /// автор
         [DisplayName("Автор")]
-        [Required(ErrorMessage = "Поле автор не может быь пустым")]
+        [Required(ErrorMessage = "Поле автор не может быть пустым")]
         [DefaultValue("")]
         public string Author { get; set; }
 
         /// издательство
         [DisplayName("Издательство")]
-        [Required(ErrorMessage = "Поле издательство не может быь пустым")]
+        [Required(ErrorMessage = "Поле издательство не может быть пустым")]
         [DefaultValue("")]
         public string PublishedBy { get; set; }
 
         /// год издания книги
         [DisplayName("Год издания")]
-        [Required(ErrorMessage = "Поле год издания не может быь пустым")]
+        [Required(ErrorMessage = "Поле год издания не может быть пустым")]
         public DateTime? PublishedDate { get; set; }
 
         /// текущий статус книги
@@ -80,6 +80,7 @@ namespace LibraryAccounting.Models
 
         /// комментарий
         [DisplayName("Комментарий")]
+        [Required (ErrorMessage = "Комментарий обязателен")]
         [DefaultValue("")]
         public string Comment { get; set; }
 

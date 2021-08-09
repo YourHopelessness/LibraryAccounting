@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 namespace LibraryAccounting.Pages.Account
 {
     /// <summary>
-    /// КЛасс-модель, обработывающий страницу обо мне
+    /// РљР›Р°СЃСЃ-РјРѕРґРµР»СЊ, РѕР±СЂР°Р±РѕС‚С‹РІР°СЋС‰РёР№ СЃС‚СЂР°РЅРёС†Сѓ РѕР±Рѕ РјРЅРµ
     /// </summary>
     [Authorize]
     public class AboutMeModel : PageModel
@@ -23,15 +23,27 @@ namespace LibraryAccounting.Pages.Account
         readonly IMapper _mapper;
         readonly IHttpContextAccessor _httpContextAccessor;
         readonly IEmployeesStatable _employees;
+        /// <summary>
+        /// РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ
+        /// </summary>
         public EmployeeInfoModel EmployeeInfo { get; set; }
 
+        /// <summary>
+        /// РљРѕРЅС‚СЃСЂСѓРєС‚РѕСЂ
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="employees"></param>
         public AboutMeModel(IMapper mapper, IHttpContextAccessor httpContextAccessor, IEmployeesStatable employees)
         {
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _employees = employees;
         }
-        //public 
+        /// <summary>
+        /// РіРµС‚
+        /// </summary>
+        /// <returns></returns>
         public async Task OnGetAsync()
         {
             if (ModelState.IsValid)
@@ -40,7 +52,7 @@ namespace LibraryAccounting.Pages.Account
             }
         }
         /// <summary>
-        /// Выход из аккаунта
+        /// Р’С‹С…РѕРґ РёР· Р°РєРєР°СѓРЅС‚Р°
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnGetLogoutAsync()

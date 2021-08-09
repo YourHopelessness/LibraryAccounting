@@ -8,6 +8,7 @@ using LibraryAccounting.BL.Dto;
 using LibraryAccounting.DAL.DB;
 using LibraryAccounting.DAL.Entities;
 using LibraryAccounting.DAL.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace LibraryAccounting.BL.Services
 {
@@ -38,24 +39,21 @@ namespace LibraryAccounting.BL.Services
     {
         /// <summary>добавление книги</summary>
         Added,
+        /// <summary>Изменение атрибутов книги</summary>
+        Edited,
         /// <summary>бронирование книги</summary>
         Reservation,
         /// <summary>возвращение в библиотеку</summary>
         Returning,
         /// <summary>смена статуса книги на утеряна</summary>
         Lost,
-        /// <summary>дургие изменения</summary>
+        /// <summary>другие изменения</summary>
         Other
     }
 
     /// <summary>Интейрейс отвечающий за регистрацию и показ изменений</summary>
     public interface IChangeble
     {
-        /// <inheritdoc></inheritdoc>
-        /// <summary>
-        /// Событие смены статуса книги
-        /// </summary>
-        public event FixBookStatus StatusChanged;
         /// <summary>
         /// Получение изменений
         /// </summary>
@@ -82,25 +80,26 @@ namespace LibraryAccounting.BL.Services
     /// <summary>Класс, релизующий интерфеск изменений</summary>
     public class ChangesManagerService : IChangeble
     {
-        /// <summary>
-        /// Событие смены статуса книги
-        /// </summary>
-        public event FixBookStatus StatusChanged;
 
         private readonly string[] commentChanges = 
             { @"{0} была добавлена книга {1} сотрудником {2}",
+              @"{0} книга {1} была изменена сотрудником {2}",
               @"{0} была забронирована книга {1} сотрудником {2}. Статус книги изменен на выдана",
               @"{0} принята книга {1} сотрудником {2}. Статус книги изменен на в бибилотеке",
               @"{0} был изменен статус книги {1} на утреряна сотрудником {2}"};
         private readonly LibraryUOW _libraryUOW;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>Констурктор с DI</summary>
-        public ChangesManagerService(BaseLibraryContext libraryContext, IMapper mapper, IReservable reservations)
+        public ChangesManagerService(
+            BaseLibraryContext libraryContext,
+            IMapper mapper, 
+            IHttpContextAccessor httpContextAccessor)
         {
             _libraryUOW = new LibraryUOW(libraryContext);
             _mapper = mapper;
-            reservations.BookChanged += FixChanges;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <inheritdoc></inheritdoc>
@@ -142,8 +141,6 @@ namespace LibraryAccounting.BL.Services
         /// <inheritdoc></inheritdoc>
         public async Task FixChanges(Guid bookId, Guid changemakerId, DateTime changeTime, ChangeType type, string comment = null)
         {
-            if (type == ChangeType.Reservation || type == ChangeType.Returning)
-                await StatusChanged.Invoke(bookId, type.ToString());
             Changes nChange = new();
             nChange.BookId = bookId;
             nChange.ChangemakerId = changemakerId;
@@ -151,13 +148,25 @@ namespace LibraryAccounting.BL.Services
             var book = (await _libraryUOW.Books.Get(filter: b => b.Id == bookId)).FirstOrDefault();
             var changemaker = (await _libraryUOW.Employees.Get(filter: e => e.Id == changemakerId))
                               .FirstOrDefault();
-            if (type == ChangeType.Other) nChange.Comment = comment;
-            else nChange.Comment = 
+            if (type == ChangeType.Other ||
+                type == ChangeType.Edited)
+            {
+                if(String.Empty == comment)
+                {
+                    _httpContextAccessor.HttpContext.Response.StatusCode = 400;
+                    return;
+                }
+                nChange.Comment = comment;
+            }
+            else
+            {
+                nChange.Comment =
                 String.Format(commentChanges[(int)type],
                               changeTime,
                               book.Title,
-                              changemaker.FirstName + " " + 
+                              changemaker.FirstName + " " +
                               changemaker.LastName);
+            }
              _libraryUOW.Changes.Insert(nChange);
              _libraryUOW.Save();
         }
